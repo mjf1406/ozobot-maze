@@ -5,9 +5,8 @@ import { Toaster } from "~/components/ui/toaster";
 import { ThemeProvider } from "~/components/theme/theme-provider";
 
 export const metadata = {
-  title: "Report Card Helper",
-  description:
-    "Reduce the amount of time and tedium on making your report cards.",
+  title: "Ozobot Maze Generator",
+  description: "Generate mazes to be solved with Ozobot command codes!",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -19,16 +18,16 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${poppins.className}`}>
-        <body>
-          <ThemeProvider
+        <body className="bg-background">
+          {/* <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
-            <main>{children}</main>
-            <Toaster />
-          </ThemeProvider>
+          > */}
+          <main>{children}</main>
+          <Toaster />
+          {/* </ThemeProvider> */}
         </body>
       </html>
     </ClerkProvider>

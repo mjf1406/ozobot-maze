@@ -1,34 +1,68 @@
-# NextJs Template
+# Ozobot Maze Generator
 
-This starts with [create t3-app](https://create.t3.gg/) and adds boilerplate for the dependencies if necessary.
+## To-do List
 
-## First Steps
+### p2
 
-1. npm install
-2. Fill out the keys in .env
-3. Uncomment `.env` in `.gitignore`
-4. Uncomment `next-env.d.ts` in `.gitignore`
-5. npm run dev
-6. Start up ngrok to use the route in `~/app/api/webhooks/route.ts`
+- Generation
+  - Eller's algo
+  - Recursive Backtracking
+  - Prim's algo
+  - Kruskal's algo
+- Inputs
+  - Number of commands required to finish the maze
+    - Minimum: ???
+    - Maximum: ???
+  - Difficulty
+    - proxy for how long the black line is that bit follows
+    - determines which command codes are required to finish the maze
+  - Generate two? (Front and back of page)
+  - Generate larger mazes? (tape multiple pages together)
+  - Grid type
+    - square
+    - circle
+    - hex
+- Output
+  - How wide is the Bit black line?
+  - Option to reveal the required commands with or without the quantities
 
-### Second Steps
+### p1
 
-1. Update APP_NAME in `~/lib/constants.ts`
-2. Update FAQ in `~/app/page.tsx`
-3. Get some colors from [RealtimeColors](https://www.realtimecolors.com/?colors=def2e7-050e09-89ddb0-1f824d-2bd579&fonts=Poppins-Poppins) and paste them into `~/styles/global.css`
-4. Set up [Turso](https://turso.tech/)
-5. Set up [Clerk](https://clerk.com/)
-6. Set up [Clerk Webhook](https://clerk.com/docs/integrations/webhooks/sync-data)
-7. Set up your schema in `~/server/db/schema.ts`
+- algo: Ozobot constraints implemented
+  - [ ] at least 25mm between any parallel tracks
+  - [ ] Zigzag and Backwalk require at least 64mm after to pick up another color code
+  - [ ] Line Switch Left/Right require a parallel line next to tit
+  - [ ] Line Switch Straight requires a perpendicular line
+  - [ ] At least 51mm between color codes
+  - [ ] there must be at least 25mm from a corner/intersection before another corner/intersection/color code
+  - [ ] line that end in a color must have a safe area with a diameter of 20mm starting from the end of the line
+  - [ ] color codes are 5mm x 5mm
+  - [ ] line thickness
+    - min: 4.5mm
+    - max: 6mm
+  - [ ] each side of a line must have at least 12mm of white space
+  - [ ] curves must have a minimum diameter of 25mm
+  - [ ] corner minimum angel is 90deg
+  - [ ] add a calibration circle to each maze: 39mm diameter
+
+### p0
+
+- UI: the reveal hints items now display in the output when checked
+- UX: updating the page size or difficulty no longer rerenders the output and user is alerted that they will have to generate a new maze if they want to see the changes take effect
+- UI: added an X button to the title input to clear it
+
+## Change Log
+
+2024/10/23
+
+- did a whole bunch of stuff because it's the initial commit
 
 ## Dependencies
 
 - Hosted on [Vercel](https://vercel.com/)
 - CSS made easy thanks to [TailwindCSS](https://tailwindcss.com/)
-- Hosted on [Vercel](https://vercel.com/)
 - Database by [Turso](https://turso.tech/)
 - Auth by [Clerk](https://clerk.com/)
 - ORM by [Drizzle](https://orm.drizzle.team/)
 - Colors from [RealtimeColors](https://www.realtimecolors.com/?colors=def2e7-050e09-89ddb0-1f824d-2bd579&fonts=Poppins-Poppins)
 - UI components from [Shadcn/ui](https://ui.shadcn.com/)
-- []()
