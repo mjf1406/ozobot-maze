@@ -1,24 +1,35 @@
-import { Card, CardContent } from "~/components/ui/card";
-import { Alert, AlertDescription } from "~/components/ui/alert";
-import { InfoIcon, Download } from "lucide-react";
+// components/MazeGeneratorOutput.tsx
+
+import { Card, CardContent, CardFooter } from "~/components/ui/card";
+import { Download, Square } from "lucide-react";
 import { Button } from "./ui/button";
 import { pixelifySans } from "~/app/fonts";
 import { useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { COLOR_CODES, generateMaze } from "~/lib/generateMaze";
+import { COLOR_CODES, getAbbreviation } from "~/lib/generateMaze";
+import {
+  createScalingObject,
+  DPI,
+  type PaperSize,
+} from "~/lib/printingFunctions";
+import type { Maze } from "./MazeGeneratorForm";
+
+export type RevealColorCodesOptions = "none" | "usable" | "used";
+
+export type RevealHintsOptions = {
+  revealColorCodes: RevealColorCodesOptions;
+  quantities: boolean;
+};
 
 export type MazeData = {
   title: string;
-  pageSize: string;
+  pageSize: PaperSize;
   difficulty: string;
   customCommands: string[];
   totalCommands: number;
-  revealHints: {
-    colorCodes: boolean;
-    quantities: boolean;
-    commands: boolean;
-  };
+  revealHints: RevealHintsOptions;
+  maze: Maze; // Include maze in MazeData type
 };
 
 const pageSizes = {
@@ -42,7 +53,7 @@ const pageSizes = {
     mm: "250 × 353",
     inches: "9.84 × 13.90",
   },
-  "US Letter": {
+  Letter: {
     pixels: "1056 × 1368",
     mm: "216 × 279",
     inches: "8.5 × 11",
@@ -59,7 +70,6 @@ const pageSizes = {
   },
 } as const;
 
-type PageSizes = typeof pageSizes;
 type PageSizeFormat = keyof typeof pageSizes;
 
 const pageFormatMap = {
@@ -67,26 +77,46 @@ const pageFormatMap = {
   A4: "a4",
   A5: "a5",
   B4: "b4",
-  "US Letter": "letter",
+  Letter: "letter",
   Legal: "legal",
   "Ledger/Tabloid": "ledger",
 };
 
-type Props = {
-  data: MazeData;
-};
-
-const MazeGeneratorOutput = ({ data }: Props) => {
+const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const hasRevealedHints = Object.values(data.revealHints).some(
-    (value) => value === true,
-  );
 
   const handleDownloadPDF = async () => {
     if (cardRef.current) {
+      // Select all abbreviation divs within cardRef.current
+      const abbreviationDivs =
+        cardRef.current.querySelectorAll(".abbreviation-div");
+      abbreviationDivs.forEach((div) => {
+        div.classList.add("pb-2");
+      });
+
+      const iconDivs = cardRef.current.querySelectorAll(".icons-div");
+      iconDivs.forEach((div) => {
+        div.classList.add("mt-1");
+      });
+
+      // Wait for the DOM to update
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Generate the canvas
       const canvas = await html2canvas(cardRef.current, { scale: 2 });
       const imgData = canvas.toDataURL("image/png");
 
+      // Remove 'pb-2' class after generating the canvas
+      abbreviationDivs.forEach((div) => {
+        div.classList.remove("pb-2");
+      });
+      iconDivs.forEach((div) => {
+        div.classList.remove("mt-1");
+      });
+
+      const scaling = createScalingObject(data.pageSize, DPI.PRINT_MEDIUM);
+
+      // Continue with PDF generation
       const pageFormat = pageFormatMap[data.pageSize as PageSizeFormat] || "a4";
 
       const pdf = new jsPDF({
@@ -103,7 +133,8 @@ const MazeGeneratorOutput = ({ data }: Props) => {
     }
   };
 
-  const maze = generateMaze(data);
+  const { maze } = data;
+  console.log("🚀 ~ MazeGeneratorOutput ~ maze:", maze);
 
   // Get dimensions from pageSizes
   const [width, height] = (
@@ -116,6 +147,88 @@ const MazeGeneratorOutput = ({ data }: Props) => {
   const scale = 0.5;
   const scaledWidth = height ? `${Math.round(height * scale)}px` : "auto";
   const scaledHeight = width ? `${Math.round(width * scale)}px` : "auto";
+
+  // Determine if any hints are revealed
+  const hasRevealedHints =
+    data.revealHints.revealColorCodes !== "none" || data.revealHints.quantities;
+
+  // Generate hints based on revealHints
+  const hints = [];
+
+  // Generate the list of color codes based on the selection
+  if (data.revealHints.revealColorCodes !== "none") {
+    let colorCodesToDisplay: typeof COLOR_CODES = COLOR_CODES.filter((code) =>
+      code.difficulties.includes(data.difficulty),
+    );
+
+    if (data.revealHints.revealColorCodes === "usable") {
+      // Display all possible color codes
+      colorCodesToDisplay = COLOR_CODES.filter((code) =>
+        code.difficulties.includes(data.difficulty),
+      );
+    } else if (data.revealHints.revealColorCodes === "used") {
+      // Display only the color codes used in the maze
+      colorCodesToDisplay = maze.usedColorCodes ?? [];
+    }
+
+    hints.push(
+      <div
+        key="color-codes"
+        className="text-4xs flex items-center justify-center gap-2"
+      >
+        {colorCodesToDisplay.map((command) => (
+          <div
+            key={command.name}
+            className="flex items-center space-x-3 rounded-lg bg-gray-100 p-1"
+          >
+            <div className="flex flex-col flex-wrap items-center justify-center">
+              <div>{command.name}</div>
+              <div className="mt-1">
+                {data.revealHints.quantities && (
+                  <div className="flex items-center gap-0.5">
+                    {Array.from({
+                      length: maze.colorCodeQuantities[command.name] ?? 0,
+                    }).map((_, i) => (
+                      <Square key={i} size={10} />
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="mt-1 flex">
+                <div
+                  className="flex h-3 w-3 items-center justify-center text-xs font-medium"
+                  style={{
+                    backgroundColor: "#130c0e",
+                  }}
+                ></div>
+                {command.colors.map((color, index) => (
+                  <div
+                    key={`${command.name}-${color}-${index}`}
+                    className="abbreviation-div flex h-3 w-3 items-center justify-center text-center font-medium"
+                    style={{
+                      backgroundColor: color,
+                      color: color === "#000000" ? "white" : "black",
+                    }}
+                  >
+                    {getAbbreviation(color)}
+                  </div>
+                ))}
+
+                {command.name !== "U-Turn (line end)" && (
+                  <div
+                    className="flex h-3 w-3 items-center justify-center font-medium"
+                    style={{
+                      backgroundColor: "#130c0e",
+                    }}
+                  ></div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>,
+    );
+  }
 
   return (
     <>
@@ -137,56 +250,71 @@ const MazeGeneratorOutput = ({ data }: Props) => {
                 {data.title} Ozobot Maze
               </div>
               <div className="text-2xs text-muted-foreground">
-                {new Date().toLocaleDateString()}
+                Help Ozobot collect all the ⭐ !
               </div>
             </div>
-            <div className="text-2xs flex gap-2">
-              <div className="flex items-center gap-1">
-                <div>Name:</div>
-                <div>______________</div>
+            <div className="flex flex-col items-end">
+              <div className="text-3xs text-muted-foreground">
+                {new Date().toLocaleDateString()}
               </div>
-              <div className="flex items-center gap-1">
-                <div>Number:</div>
-                <div>____</div>
+              <div className="text-2xs flex gap-2">
+                <div className="flex items-center gap-1">
+                  <div>Name:</div>
+                  <div>______________</div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div>Number:</div>
+                  <div>____</div>
+                </div>
               </div>
             </div>
           </div>
           <div className="grid grid-cols-5">
-            {hasRevealedHints && (
-              <div className="col-span-1 h-full rounded-lg bg-gray-100 p-2">
-                <div className="w-full text-center text-sm font-semibold">
-                  Key
-                </div>
-                {Object.entries(data.revealHints).map(
-                  ([key, isRevealed]) =>
-                    isRevealed && (
-                      <Alert
-                        key={key}
-                        variant="default"
-                        className="bg-muted/50"
+            <div
+              className={`${
+                hasRevealedHints ? "col-span-4" : "col-span-5"
+              } rounded-lg p-4 font-mono`}
+            >
+              {/* <pre>{maze.mazeText}</pre> */}
+              {maze.grid && maze.grid.length > 0 && (
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: `repeat(${maze.grid.length}, ${5 * scale}mm)`,
+                    width: `${maze.grid.length * 5 * scale}mm`,
+                    height: `${(maze.grid[0]?.length ?? 0) * 5 * scale}mm`,
+                  }}
+                >
+                  {maze.grid.flat().map((cell, index) => {
+                    const numColumns = maze.grid.length;
+                    const row = Math.floor(index / numColumns);
+                    const col = index % numColumns;
+
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          width: `${5 * scale}mm`,
+                          height: `${5 * scale}mm`,
+                        }}
+                        className={`border-b border-r ${row === 0 ? "border-t" : ""} ${
+                          col === 0 ? "border-l" : ""
+                        }`}
                       >
-                        <InfoIcon className="h-4 w-4" />
-                        <AlertDescription>
-                          Hint:{" "}
-                          {key
-                            .replace(/([A-Z])/g, " $1")
-                            .split(" ")
-                            .map(
-                              (word) =>
-                                word.charAt(0).toUpperCase() + word.slice(1),
-                            )
-                            .join(" ")}{" "}
-                          Displayed
-                        </AlertDescription>
-                      </Alert>
-                    ),
-                )}
-              </div>
-            )}
-            <div className="rounded-lg p-4 font-mono">
-              <pre>{maze}</pre>
+                        {/* Render cell content if needed */}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
+          <CardFooter className="text-5xs absolute -bottom-5 flex w-full flex-col items-center justify-center">
+            {hasRevealedHints && <div className="text-2xs">{hints}</div>}
+            <div className="text-center">
+              Generated at https://ozobot-maze.vercel.app/
+            </div>
+          </CardFooter>
         </CardContent>
       </Card>
       <Button

@@ -88,7 +88,7 @@ const MazeLoading = ({ className }: MazeLoadingProps) => {
                 d="M 40 0 L 0 0 0 40"
                 fill="none"
                 stroke="#eee"
-                stroke-width="1"
+                strokeWidth="1"
               />
             </pattern>
           </defs>
@@ -98,8 +98,8 @@ const MazeLoading = ({ className }: MazeLoadingProps) => {
             d="M 0 80 L 80 80 L 80 120 L 160 120"
             fill="none"
             stroke="#3b82f6"
-            stroke-width="8"
-            stroke-linecap="round"
+            strokeWidth="8"
+            strokeLinecap="round"
           >
             <animate
               attributeName="stroke-dasharray"
@@ -114,8 +114,8 @@ const MazeLoading = ({ className }: MazeLoadingProps) => {
             d="M 40 0 L 40 40 L 120 40 L 120 160"
             fill="none"
             stroke="#3b82f6"
-            stroke-width="8"
-            stroke-linecap="round"
+            strokeWidth="8"
+            strokeLinecap="round"
           >
             <animate
               attributeName="stroke-dasharray"
@@ -131,8 +131,8 @@ const MazeLoading = ({ className }: MazeLoadingProps) => {
             d="M 160 0 L 160 80 L 200 80"
             fill="none"
             stroke="#3b82f6"
-            stroke-width="8"
-            stroke-linecap="round"
+            strokeWidth="8"
+            strokeLinecap="round"
           >
             <animate
               attributeName="stroke-dasharray"

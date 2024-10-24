@@ -27,8 +27,7 @@ export default function HomePage() {
           because many students would finish their Ozobot tasks quite quickly,
           so I wanted to have some fast finisher activities available for them.
           Alas, life got in the way, so I didn&apos;t complete it until I moved
-          to Younghoon, but my grade (5th) makes use of it in one module and the
-          6th grade team makes use of it during their summer camp!
+          to Younghoon.
         </p>
         <p className="pt-8">
           If you find it useful, I humbly request you{" "}

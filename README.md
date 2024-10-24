@@ -38,8 +38,6 @@
   - [ ] line that end in a color must have a safe area with a diameter of 20mm starting from the end of the line
   - [ ] color codes are 5mm x 5mm
   - [ ] line thickness
-    - min: 4.5mm
-    - max: 6mm
   - [ ] each side of a line must have at least 12mm of white space
   - [ ] curves must have a minimum diameter of 25mm
   - [ ] corner minimum angel is 90deg
@@ -47,11 +45,17 @@
 
 ### p0
 
+## Change Log
+
+2024/10/24
+
+- UX: the loading state now is ended upon maze generation instead of using a setTimeout
+- algo: can now render a grid based on paper size
+- UI: the printed CSS is no longer different from the on-page rendered CSS
 - UI: the reveal hints items now display in the output when checked
 - UX: updating the page size or difficulty no longer rerenders the output and user is alerted that they will have to generate a new maze if they want to see the changes take effect
 - UI: added an X button to the title input to clear it
-
-## Change Log
+- output: added the website URL to the output maze in the footer: https://ozobot-maze.vercel.app/
 
 2024/10/23
 
