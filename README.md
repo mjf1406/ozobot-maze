@@ -45,10 +45,9 @@
 
 ### p0
 
-- fixed: emoji now appear correctly
-
 ## Change Log
 
+- fixed: flags now appear correctly in LocaleSwitcher
 - fixed: there is no longer a delay in setting the locale dropdown to the current locale
   2024/10/26
 

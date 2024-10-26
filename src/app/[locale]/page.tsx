@@ -1,3 +1,5 @@
+// src/app/[locale]/page.tsx
+
 import Footer from "~/components/Footer";
 import MazeForm from "~/components/MazeGeneratorForm";
 import { pixelifySans, comfortaa } from "../fonts";
@@ -5,8 +7,17 @@ import OzobotComponent from "~/components/Ozobot";
 import { getI18n } from "locales/server";
 import { LocaleSwitcher } from "~/components/LocaleSwitcher";
 
-export default async function HomePage() {
+export type Locale = "en" | "ko" | "zh";
+
+export interface PageProps {
+  params: {
+    locale: Locale;
+  };
+}
+
+export default async function HomePage({ params }: PageProps) {
   const t = await getI18n();
+  const currentLocale = params.locale || "en";
 
   return (
     <main className="m-8 flex flex-col items-center justify-center gap-10">
@@ -14,7 +25,7 @@ export default async function HomePage() {
         {t("app_title")}
       </h1>
       <OzobotComponent />
-      <LocaleSwitcher />
+      <LocaleSwitcher currentLocale={currentLocale} />
       <MazeForm />
       <div className={`max-w-xl text-lg ${comfortaa.className}`}>
         <h2

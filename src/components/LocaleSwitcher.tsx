@@ -1,40 +1,56 @@
 "use client";
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "~/components/ui/select";
+import Image from "next/image";
 
-export function LocaleSwitcher() {
-  const pathname = usePathname();
-  const currentLocale = pathname.split("/")[1] ?? "en";
-  const [locale, setLocale] = useState(currentLocale);
+type Locale = "en" | "ko" | "zh";
 
-  const changeLocale = (newLocale: string) => {
-    // Replace the current locale in the pathname with the new locale
-    const segments = pathname.split("/");
+interface LocaleSwitcherProps {
+  currentLocale: Locale;
+}
+
+const locales = {
+  en: { label: "English", flag: "/img/flags/us.svg" },
+  ko: { label: "한국어", flag: "/img/flags/kr.svg" },
+  zh: { label: "简体中文", flag: "/img/flags/cn.svg" },
+} as const;
+
+export function LocaleSwitcher({ currentLocale }: LocaleSwitcherProps) {
+  const changeLocale = (newLocale: Locale) => {
+    const segments = window.location.pathname.split("/");
     segments[1] = newLocale;
     const newPath = segments.join("/") || "/";
     window.location.href = newPath;
   };
 
   return (
-    <select
-      value={locale}
-      onChange={(e) => changeLocale(e.target.value)}
-      className="border-none p-1 px-3"
-      style={{
-        fontFamily:
-          "Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif !important",
-      }}
-    >
-      <option className="bg-white dark:bg-black" value="en">
-        🇺🇸 English
-      </option>
-      <option className="bg-white dark:bg-black" value="ko">
-        🇰🇷 한국어
-      </option>
-      <option className="bg-white dark:bg-black" value="zh">
-        🇨🇳 简体中文
-      </option>
-    </select>
+    <Select value={currentLocale} onValueChange={changeLocale}>
+      <SelectTrigger className="w-[180px] bg-card">
+        <div className="flex items-center gap-2">
+          <Image
+            src={locales[currentLocale].flag}
+            alt={locales[currentLocale].label}
+            width={20}
+            height={20}
+          />
+          {locales[currentLocale].label}
+        </div>
+      </SelectTrigger>
+      <SelectContent className="bg-card">
+        {Object.entries(locales).map(([code, { label, flag }]) => (
+          <SelectItem key={code} value={code as Locale}>
+            <div className="flex items-center gap-2">
+              <Image src={flag} alt={label} width={20} height={20} />
+              {label}
+            </div>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
