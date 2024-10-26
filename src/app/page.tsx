@@ -36,7 +36,7 @@ export default function HomePage() {
           </a>{" "}
           or subscribe to{" "}
           <a className="link" href="">
-            my patreon
+            my Patreon
           </a>
           .
         </p>

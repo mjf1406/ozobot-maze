@@ -45,6 +45,8 @@
 
 ### p0
 
+- UX: added Korean and Chinese simplified using next-international: https://docs.google.com/spreadsheets/d/1R3-hWtn4Krmn088SiIITLgav9V1oalo7tXeQHrucyY0/edit?gid=0#gid=0
+
 ## Change Log
 
 2024/10/24
