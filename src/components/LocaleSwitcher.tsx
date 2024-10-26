@@ -1,23 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 export function LocaleSwitcher() {
-  const [locale, setLocale] = useState("en"); // Default locale
-
-  useEffect(() => {
-    // Get the current locale from the URL (if available)
-    const currentLocale = window.location.pathname.split("/")[1];
-    setLocale(currentLocale ?? "en"); // Fallback to "en" if no locale is set
-  }, []);
+  const pathname = usePathname();
+  const currentLocale = pathname.split("/")[1] ?? "en";
+  const [locale, setLocale] = useState(currentLocale);
 
   const changeLocale = (newLocale: string) => {
-    // Change the URL to reflect the new locale
-    const newPath = window.location.pathname.replace(
-      `/${locale}`,
-      `/${newLocale}`,
-    );
-    window.location.href = newPath; // Redirect the user to the new locale page
+    // Replace the current locale in the pathname with the new locale
+    const segments = pathname.split("/");
+    segments[1] = newLocale;
+    const newPath = segments.join("/") || "/";
+    window.location.href = newPath;
   };
 
   return (
