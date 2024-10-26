@@ -6,6 +6,8 @@ import { pixelifySans, comfortaa } from "../fonts";
 import OzobotComponent from "~/components/Ozobot";
 import { getI18n } from "locales/server";
 import { LocaleSwitcher } from "~/components/LocaleSwitcher";
+import Tips from "~/components/Tips";
+import FAQ from "~/components/FAQ";
 
 export type Locale = "en" | "ko" | "zh";
 
@@ -26,7 +28,10 @@ export default async function HomePage({ params }: PageProps) {
       </h1>
       <OzobotComponent />
       <LocaleSwitcher currentLocale={currentLocale} />
-      <MazeForm />
+      <span id="form">
+        <MazeForm />
+      </span>
+      <Tips />
       <div className={`max-w-xl text-lg ${comfortaa.className}`}>
         <h2
           className={`mb-5 text-center text-3xl font-semibold ${pixelifySans.className}`}
@@ -59,6 +64,7 @@ export default async function HomePage({ params }: PageProps) {
           .
         </p>
       </div>
+      <FAQ />
       <Footer />
     </main>
   );

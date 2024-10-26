@@ -2,6 +2,10 @@
 
 ## To-do List
 
+### p3
+
+- UI: completed the FAQ and added translations
+
 ### p2
 
 - Generation
@@ -45,8 +49,13 @@
 
 ### p0
 
+- UX: added translations for Tips in ko and zhs
+
 ## Change Log
 
+- UX: added a tips section just below the output
+- UX: added two types of generations: Ozobot Maze and Ozobot Challenge
+- algo: number of each Color Code is now randomly determined
 - fixed: flags now appear correctly in LocaleSwitcher
 - fixed: there is no longer a delay in setting the locale dropdown to the current locale
   2024/10/26

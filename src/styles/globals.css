@@ -82,8 +82,17 @@ html {
 }
 .text-5xs {
   font-size: 0.3rem; /* px */
-  line-height: 0.7rem; /* px */
+  line-height: 0.4rem; /* px */
 }
+.text-6xs {
+  font-size: 0.2rem; /* px */
+  line-height: 0.3rem; /* px */
+}
+.text-7xs {
+  font-size: 0.1rem; /* px */
+  line-height: 0.2rem; /* px */
+}
+
 .text-10xl {
   font-size: 10rem; /* 160px */
   line-height: 1; /* 16px */

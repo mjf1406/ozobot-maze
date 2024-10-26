@@ -7,13 +7,13 @@ import { pixelifySans } from "~/app/fonts";
 import { useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { COLOR_CODES, getAbbreviation } from "~/lib/generateMaze";
+import { COLOR_CODES, COLORS, getAbbreviation } from "~/lib/generateMaze";
 import {
   createScalingObject,
   DPI,
   type PaperSize,
 } from "~/lib/printingFunctions";
-import type { Maze } from "./MazeGeneratorForm";
+import type { Maze, MazeTypeOptions } from "./MazeGeneratorForm";
 
 export type RevealColorCodesOptions = "none" | "usable" | "used";
 
@@ -30,6 +30,7 @@ export type MazeData = {
   totalCommands: number;
   revealHints: RevealHintsOptions;
   maze: Maze; // Include maze in MazeData type
+  mazeType: MazeTypeOptions; // Include the type in the output
 };
 
 const pageSizes = {
@@ -120,7 +121,7 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
       const pageFormat = pageFormatMap[data.pageSize as PageSizeFormat] || "a4";
 
       const pdf = new jsPDF({
-        orientation: "landscape",
+        orientation: "landscape", // Ensure landscape orientation
         unit: "pt",
         format: pageFormat,
       });
@@ -145,8 +146,8 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
 
   // Scale down the dimensions for screen display (e.g., 1/2 scale)
   const scale = 0.5;
-  const scaledWidth = height ? `${Math.round(height * scale)}px` : "auto";
-  const scaledHeight = width ? `${Math.round(width * scale)}px` : "auto";
+  const scaledWidth = width ? `${Math.round(width * scale)}px` : "auto";
+  const scaledHeight = height ? `${Math.round(height * scale)}px` : "auto";
 
   // Determine if any hints are revealed
   const hasRevealedHints =
@@ -237,8 +238,8 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
         className="relative border-none bg-white"
         id="output"
         style={{
-          width: scaledWidth,
-          height: scaledHeight,
+          width: scaledHeight,
+          height: scaledWidth,
           minHeight: "400px", // Fallback minimum height
           aspectRatio: width && height ? `${width} / ${height}` : "auto",
         }}
@@ -247,10 +248,13 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
           <div className="mb-4 flex items-start justify-between">
             <div>
               <div className="text-sm font-semibold">
-                {data.title} Ozobot Maze
+                {data.title} Ozobot{" "}
+                {data.mazeType === "ozobot_challenge" ? "Challenge" : "Maze"}
               </div>
-              <div className="text-2xs text-muted-foreground">
-                Help Ozobot collect all the ⭐ !
+              <div className="text-4xs text-muted-foreground">
+                {data.mazeType === "ozobot_challenge"
+                  ? "Create a path for Ozobot using all the Color Codes below! Plan your path in pencil first, then double and triple check it!"
+                  : "Help Ozobot collect all the ⭐! Plan your Color Codes in pencil first, then double and triple check them!"}
               </div>
             </div>
             <div className="flex flex-col items-end">
@@ -280,30 +284,83 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: `repeat(${maze.grid.length}, ${5 * scale}mm)`,
-                    width: `${maze.grid.length * 5 * scale}mm`,
-                    height: `${(maze.grid[0]?.length ?? 0) * 5 * scale}mm`,
+                    gridTemplateColumns: `repeat(${maze.grid[0]?.length ?? 0}, ${5 * scale}mm)`,
+                    width: `${maze.grid[0]?.length ?? 0 * 5 * scale}mm`,
+                    height: `${maze.grid.length * 5 * scale}mm`,
                   }}
                 >
                   {maze.grid.flat().map((cell, index) => {
-                    const numColumns = maze.grid.length;
-                    const row = Math.floor(index / numColumns);
-                    const col = index % numColumns;
+                    const numColumns = maze.grid[0]?.length ?? 0; // Number of columns in the grid
+                    const numRows = maze.grid.length; // Number of rows in the grid
+                    const row = Math.floor(index / numColumns); // Current row
+                    const col = index % numColumns; // Current column
 
-                    return (
-                      <div
-                        key={index}
-                        style={{
-                          width: `${5 * scale}mm`,
-                          height: `${5 * scale}mm`,
-                        }}
-                        className={`border-b border-r ${row === 0 ? "border-t" : ""} ${
-                          col === 0 ? "border-l" : ""
-                        }`}
-                      >
-                        {/* Render cell content if needed */}
-                      </div>
-                    );
+                    // Determine the key for each cell to ensure unique identification
+                    const cellKey = `${row}-${col}`;
+
+                    // Conditional rendering based on mazeType
+                    if (data.mazeType === "ozobot_challenge") {
+                      return (
+                        <div
+                          key={cellKey}
+                          style={{
+                            width: `${5 * scale}mm`,
+                            height: `${5 * scale}mm`,
+                            backgroundColor: cell.color ?? COLORS.white,
+                          }}
+                          className={`flex items-center justify-center border-b border-r ${
+                            row === 0 ? "border-t" : ""
+                          } ${col === 0 ? "border-l" : ""}`}
+                        >
+                          {/* Render cell content specific to Ozobot Challenge */}
+                          <div
+                            className={`text-7xs ${cell.color ? "text-white" : "text-black"}`}
+                          >
+                            {row}, {col}
+                          </div>
+                        </div>
+                      );
+                    } else if (data.mazeType === "ozobot_maze") {
+                      return (
+                        <div
+                          key={cellKey}
+                          style={{
+                            width: `${5 * scale}mm`,
+                            height: `${5 * scale}mm`,
+                            backgroundColor: cell.color ?? COLORS.white,
+                          }}
+                          className={`flex items-center justify-center border-b border-r ${
+                            cell.color === COLORS.white && "border"
+                          }`}
+                        >
+                          {/* Render cell content specific to Ozobot Maze */}
+                          {/* You can customize this section as needed */}
+                          <span className="text-xs">
+                            {/* Optional Content */}
+                          </span>
+                        </div>
+                      );
+                    } else {
+                      // Fallback rendering if mazeType is neither 'ozobot_challenge' nor 'ozobot_maze'
+                      return (
+                        <div
+                          key={cellKey}
+                          style={{
+                            width: `${5 * scale}mm`,
+                            height: `${5 * scale}mm`,
+                            backgroundColor: cell.color ?? COLORS.white,
+                          }}
+                          className={`flex items-center justify-center border-b border-r ${
+                            row === 0 ? "border-t" : ""
+                          } ${col === 0 ? "border-l" : ""}`}
+                        >
+                          {/* Default cell content */}
+                          <span className="text-xs">
+                            {/* Optional Content */}
+                          </span>
+                        </div>
+                      );
+                    }
                   })}
                 </div>
               )}

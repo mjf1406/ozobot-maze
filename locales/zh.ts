@@ -4,7 +4,7 @@ export default {
   'form_title': '标题',
   'form_page_size': '页面大小',
   'form_page_size_alert': '页面大小已更改。请生成一个新的迷宫。',
-  'form_page_size_desc': '更大的页面减轻了迷宫生成算法的限制，通常会生成更具挑战性的迷宫。',
+  'form_page_size_desc': '更大的页面减轻了迷宫生成算法的限制，通常会导致更具挑战性的 Ozobot 迷宫，但 Ozobot 挑战则更容易。',
   'form_difficulty': '难度',
   'form_difficulty_alert': '难度已更改。请生成一个新的迷宫。',
   'form_difficulty_desc': '难度降低时，解决迷宫所需的颜色代码较少，可能的颜色代码组合也较少。',
@@ -18,7 +18,7 @@ export default {
   'form_color_code_quantities': '颜色代码数量',
   'form_reveal_color_codes_enable_checkbox': '显示颜色代码以启用此复选框。',
   'form_display_quantity_next_to_color_code': '显示每个已使用的颜色代码旁边的数量。',
-  'form_generate_maze': '生成迷宫',
+  'form_generate_maze': '生成',
   'app_meet_dev': '认识开发者',
   'app_how_fortuitous_you_have_arrived': '你来的真是太好了！我的名字是',
   'app_developer_name': '迈克尔。',
@@ -45,4 +45,9 @@ export default {
   'form_title_placeholder': '请输入标题', // Optional
   'form_clear_title': '清除标题',        // Optional
   'form_reveal_color_codes_none': '无',
+  "form_type": "类型",
+  "form_type_ozobot_maze": "Ozobot 迷宫",
+  "form_type_ozobot_challenge": "Ozobot 挑战",
+  "form_type_desc": "Ozobot迷宫：在迷宫中导航，收集所有星星。Ozobot挑战：根据相应复选框的要求，尽可能多次使用颜色代码。",
+  "form_type_alert": "更改类型不会更新当前迷宫。请重新生成以应用新类型。"
 } as const;

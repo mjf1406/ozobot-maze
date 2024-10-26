@@ -4,7 +4,7 @@ export default {
   'form_title': '제목',
   'form_page_size': '페이지 크기',
   'form_page_size_alert': '페이지 크기가 변경되었습니다. 새 미로를 생성해주세요.',
-  'form_page_size_desc': '더 큰 페이지는 미로 생성 알고리즘의 제약을 완화하여 일반적으로 더 어려운 미로를 생성합니다.',
+  'form_page_size_desc': '더 큰 페이지는 미로 생성 알고리즘의 제약을 완화하여 일반적으로 더 도전적인 Ozobot 미로를 만들지만, Ozobot 도전 과제는 더 쉽게 만듭니다.',
   'form_difficulty': '난이도',
   'form_difficulty_alert': '난이도가 변경되었습니다. 새 미로를 생성해주세요.',
   'form_difficulty_desc': '난이도가 낮아지면 미로를 해결하는 데 필요한 색상 코드가 줄어들고, 가능한 색상 코드 조합도 줄어듭니다.',
@@ -18,7 +18,7 @@ export default {
   'form_color_code_quantities': '색상 코드 수량',
   'form_reveal_color_codes_enable_checkbox': '이 체크박스를 활성화하려면 색상 코드를 공개하세요.',
   'form_display_quantity_next_to_color_code': '사용된 각 색상 코드 옆에 수량을 표시합니다.',
-  'form_generate_maze': '미로 생성',
+  'form_generate_maze': '생성',
   'app_meet_dev': '개발자 만나기',
   'app_how_fortuitous_you_have_arrived': '우연히도 당신이 도착했군요! 제 이름은',
   'app_developer_name': '마이클',
@@ -45,4 +45,9 @@ export default {
   'form_title_placeholder': '제목을 입력하세요', // Optional
   'form_clear_title': '제목 지우기',            // Optional
   'form_reveal_color_codes_none': '없음',
+  "form_type": "유형",
+  "form_type_ozobot_maze": "Ozobot 미로",
+  "form_type_ozobot_challenge": "Ozobot 챌린지",
+  "form_type_desc": "Ozobot 미로: 모든 별을 수집하기 위해 미로를 탐색하세요. Ozobot 챌린지: 해당 체크박스가 요구하는 만큼 색상 코드를 사용하세요.",
+  "form_type_alert": "유형을 변경해도 현재 미로는 업데이트되지 않습니다. 새 유형을 적용하려면 다시 생성하세요."
 } as const;

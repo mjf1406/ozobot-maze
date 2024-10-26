@@ -4,7 +4,7 @@ export default {
   'form_title': 'Title',
   'form_page_size': 'Page Size',
   'form_page_size_alert': 'Page size has changed. Please generate a new maze.',
-  'form_page_size_desc': 'Larger pages ease the constraints on the maze generation algorithm, generally resulting in more challenging mazes.',
+  'form_page_size_desc': 'Larger pages ease the constraints on the maze generation algorithm, generally resulting in more challenging Ozobot Mazes, but easier Ozobot Challenges.',
   'form_difficulty': 'Difficulty',
   'form_difficulty_alert': 'Difficulty has changed. Please generate a new maze.',
   'form_difficulty_desc': 'As the difficulty decreases, fewer color codes are required to solve the maze, and there are also fewer possible color code combinations.',
@@ -18,7 +18,7 @@ export default {
   'form_color_code_quantities': 'Color Code Quantities',
   'form_reveal_color_codes_enable_checkbox': 'Reveal Color Codes to enable this checkbox.',
   'form_display_quantity_next_to_color_code': 'Displays the quantity next to each color code that is used.',
-  'form_generate_maze': 'Generate Maze',
+  'form_generate_maze': 'Generate',
   'app_meet_dev': 'Meet the Dev',
   'app_how_fortuitous_you_have_arrived': 'How fortuitous you have arrived! The name\'s',
   'app_developer_name': 'Michael',
@@ -45,4 +45,9 @@ export default {
   'form_title_placeholder': 'Enter title', // Optional
   'form_clear_title': 'Clear title',       // Optional
   'form_reveal_color_codes_none': 'None',
+  "form_type": "Type",
+  "form_type_ozobot_maze": "Ozobot Maze",
+  "form_type_ozobot_challenge": "Ozobot Challenge",
+  "form_type_desc": "Ozobot Maze: Navigate a maze to collect all the stars. Ozobot Challenge: Use the Color Codes as many times as their corresponding checkboxes require.",
+  "form_type_alert": "Changing the type will not update the current maze. Please regenerate to apply the new type."
 } as const;
