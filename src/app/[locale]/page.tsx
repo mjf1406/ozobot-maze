@@ -1,49 +1,49 @@
 import Footer from "~/components/Footer";
 import MazeForm from "~/components/MazeGeneratorForm";
-import { pixelifySans, comfortaa } from "./fonts";
+import { pixelifySans, comfortaa } from "../fonts";
 import OzobotComponent from "~/components/Ozobot";
+import { getI18n } from "locales/server";
+import { LocaleSwitcher } from "~/components/LocaleSwitcher";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const t = await getI18n();
+
   return (
     <main className="m-8 flex flex-col items-center justify-center gap-10">
       <h1 className={`text-5xl font-semibold ${pixelifySans.className}`}>
-        Ozobot Maze Generator
+        {t("app_title")}
       </h1>
       <OzobotComponent />
+      <LocaleSwitcher />
       <MazeForm />
       <div className={`max-w-xl text-lg ${comfortaa.className}`}>
         <h2
           className={`mb-5 text-center text-3xl font-semibold ${pixelifySans.className}`}
         >
-          Meet the Dev
+          {t("app_meet_dev")}
         </h2>
         <p>
-          How fortuitous you have arrived! The name&apos;s{" "}
+          {t("app_how_fortuitous_you_have_arrived")}{" "}
           <a className="link" href="https://mr-monkey-portfolio.vercel.app/">
-            Michael
+            {t("app_developer_name")}
           </a>{" "}
-          and I built this Ozobot Maze Generator! I had the idea when I was
-          teaching a &apos;Coding&apos; class while working at Maple Bear
-          because many students would finish their Ozobot tasks quite quickly,
-          so I wanted to have some fast finisher activities available for them.
-          Alas, life got in the way, so I didn&apos;t complete it until I moved
-          to Younghoon.
+          {t("app_built_ozobot_maze_generator")}
         </p>
         <p className="pt-8">
-          If you find it useful, I humbly request you{" "}
+          {t("app_if_useful_request")}{" "}
           <a className="link" href="">
-            buy me an avocado
+            {t("app_buy_me_an_avocado")}
           </a>{" "}
-          or subscribe to{" "}
+          {t("app_or_subscribe_to")}{" "}
           <a className="link" href="">
-            my Patreon
+            {t("app_my_patreon")}
           </a>
           .
         </p>
         <p className="pt-8">
-          If you don&apos;t know what Ozobot is, click{" "}
+          {t("app_if_dont_know_ozobot")}{" "}
           <a className="link" href="https://ozobot.com/">
-            here
+            {t("app_here")}
           </a>
           .
         </p>

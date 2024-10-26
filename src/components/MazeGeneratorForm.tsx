@@ -1,4 +1,4 @@
-// components/MazeForm.tsx
+// src/components/MazeForm.tsx
 
 "use client";
 
@@ -15,13 +15,46 @@ import { AlertTriangle, Dices, X } from "lucide-react";
 import NumberInput from "./ui/number-input";
 import { COLOR_CODES, generateMaze, getAbbreviation } from "~/lib/generateMaze";
 import type { PaperSize } from "~/lib/printingFunctions";
+import { useI18n } from "locales/client";
 
-const PaperSize = [
-  { value: "A4", label: "A4" },
-  { value: "A3", label: "A3" },
-  { value: "Letter", label: "Letter" },
-  { value: "Legal", label: "Legal" },
-];
+export type TranslationKey =
+  | "form_title"
+  | "form_title_placeholder"
+  | "form_clear_title"
+  | "form_page_size"
+  | "form_page_size_A4"
+  | "form_page_size_A3"
+  | "form_page_size_Letter"
+  | "form_page_size_Legal"
+  | "form_page_size_alert"
+  | "form_page_size_desc"
+  | "form_difficulty"
+  | "difficulty_easy"
+  | "difficulty_medium"
+  | "difficulty_hard"
+  | "difficulty_custom"
+  | "form_difficulty_alert"
+  | "form_difficulty_desc"
+  | "form_difficulty_custom"
+  | "form_difficulty_custom_total_codes"
+  | "form_reveal_color_codes"
+  | "form_reveal_color_codes_none"
+  | "form_usable_color_codes"
+  | "form_used_color_codes"
+  | "form_choose_reveal_color_codes"
+  | "form_hint"
+  | "form_color_code_quantities"
+  | "form_reveal_color_codes_enable_checkbox"
+  | "form_display_quantity_next_to_color_code"
+  | "form_generate_maze";
+
+const PaperSizeOptions: Array<{ value: PaperSize; labelKey: TranslationKey }> =
+  [
+    { value: "A4", labelKey: "form_page_size_A4" },
+    { value: "A3", labelKey: "form_page_size_A3" },
+    { value: "Letter", labelKey: "form_page_size_Letter" },
+    { value: "Legal", labelKey: "form_page_size_Legal" },
+  ];
 
 type DifficultyOptions = "easy" | "medium" | "hard" | "custom";
 
@@ -32,11 +65,14 @@ export type Maze = {
   grid: number[][];
 };
 
-const difficultyOptions = [
-  { value: "easy", label: "Easy" },
-  { value: "medium", label: "Medium" },
-  { value: "hard", label: "Hard" },
-  { value: "custom", label: "Custom" },
+const difficultyOptions: Array<{
+  value: DifficultyOptions;
+  labelKey: TranslationKey;
+}> = [
+  { value: "easy", labelKey: "difficulty_easy" },
+  { value: "medium", labelKey: "difficulty_medium" },
+  { value: "hard", labelKey: "difficulty_hard" },
+  { value: "custom", labelKey: "difficulty_custom" },
 ];
 
 type RevealColorCodesOptions = "none" | "usable" | "used";
@@ -47,6 +83,7 @@ type RevealHintsOptions = {
 };
 
 const MazeForm = () => {
+  const t = useI18n();
   const [title, setTitle] = useState("");
   const [pageSize, setPageSize] = useState<PaperSize>("A4");
   const [difficulty, setDifficulty] = useState<DifficultyOptions>("easy");
@@ -60,8 +97,6 @@ const MazeForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // New state to hold the data used to generate the output
-  // components/MazeForm.tsx
-
   const [outputData, setOutputData] = useState<{
     title: string;
     pageSize: PaperSize;
@@ -71,8 +106,6 @@ const MazeForm = () => {
     revealHints: RevealHintsOptions;
     maze: Maze; // Include the maze in the type
   } | null>(null);
-
-  // components/MazeForm.tsx
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,13 +158,14 @@ const MazeForm = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Title Input */}
         <div>
-          <label className="block text-sm font-medium">Title</label>
+          <label className="block text-sm font-medium">{t("form_title")}</label>
           <div className="relative">
             <Input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="mt-1 pr-10"
+              placeholder={t("form_title_placeholder")}
             />
             {title && (
               <Button
@@ -139,6 +173,7 @@ const MazeForm = () => {
                 variant={"ghost"}
                 onClick={() => setTitle("")}
                 className="absolute inset-y-0 right-0 flex items-center"
+                aria-label={t("form_clear_title")}
               >
                 <X size={20} />
               </Button>
@@ -148,16 +183,23 @@ const MazeForm = () => {
 
         {/* Page Size Select */}
         <div>
-          <label className="block text-sm font-medium">Page Size</label>
+          <label className="block text-sm font-medium">
+            {t("form_page_size")}
+          </label>
           <RadioGroup
-            defaultValue={pageSize}
+            value={pageSize}
             className="mt-1"
             onValueChange={(value) => setPageSize(value as PaperSize)}
           >
-            {PaperSize.map((option) => (
+            {PaperSizeOptions.map((option) => (
               <div key={option.value} className="flex items-center space-x-2">
-                <RadioGroupItem value={option.value} id={option.value} />
-                <Label htmlFor={option.value}>{option.label}</Label>
+                <RadioGroupItem
+                  value={option.value}
+                  id={`page-size-${option.value}`}
+                />
+                <Label htmlFor={`page-size-${option.value}`}>
+                  {t(option.labelKey)}
+                </Label>
               </div>
             ))}
           </RadioGroup>
@@ -166,21 +208,21 @@ const MazeForm = () => {
             outputData &&
             pageSize !== outputData.pageSize && (
               <div className="mt-2 flex items-center gap-2 text-sm text-destructive">
-                <AlertTriangle size={16} /> Page size has changed. Please
-                generate a new maze.
+                <AlertTriangle size={16} /> {t("form_page_size_alert")}
               </div>
             )}
           <div className="mt-1 text-sm text-muted-foreground">
-            Larger pages ease the constraints on the maze generation algorithm,
-            generally resulting in more challenging mazes.
+            {t("form_page_size_desc")}
           </div>
         </div>
 
         {/* Difficulty RadioGroup */}
         <div>
-          <label className="block text-sm font-medium">Difficulty</label>
+          <label className="block text-sm font-medium">
+            {t("form_difficulty")}
+          </label>
           <RadioGroup
-            defaultValue={difficulty}
+            value={difficulty}
             className="mt-1"
             onValueChange={(value) => setDifficulty(value as DifficultyOptions)}
           >
@@ -191,7 +233,7 @@ const MazeForm = () => {
                   id={`difficulty-${option.value}`}
                 />
                 <Label htmlFor={`difficulty-${option.value}`}>
-                  {option.label}
+                  {t(option.labelKey)}
                 </Label>
               </div>
             ))}
@@ -201,13 +243,11 @@ const MazeForm = () => {
             outputData &&
             difficulty !== outputData.difficulty && (
               <div className="mt-2 flex items-center gap-2 text-sm text-destructive">
-                <AlertTriangle size={16} /> Difficulty has changed. Please
-                generate a new maze.
+                <AlertTriangle size={16} /> {t("form_difficulty_alert")}
               </div>
             )}
           <div className="mt-1 text-sm text-muted-foreground">
-            As the difficulty decreases, fewer color codes are required to solve
-            the maze, and there are also fewer possible color code combinations.
+            {t("form_difficulty_desc")}
           </div>
 
           {/* Custom Commands Selection */}
@@ -215,7 +255,7 @@ const MazeForm = () => {
             <div className="mt-4 space-y-4">
               <div>
                 <label className="block text-sm font-medium">
-                  Select Commands to Use
+                  {t("form_difficulty_custom")}
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   {COLOR_CODES.map((command) => (
@@ -281,7 +321,7 @@ const MazeForm = () => {
 
               <div>
                 <label className="block text-sm font-medium">
-                  Total number of color codes
+                  {t("form_difficulty_custom_total_codes")}
                 </label>
                 <NumberInput
                   value={totalCommands}
@@ -304,7 +344,7 @@ const MazeForm = () => {
             {/* Reveal Color Codes RadioGroup */}
             <div>
               <label className="block text-sm font-medium">
-                Reveal Color Codes
+                {t("form_reveal_color_codes")}
               </label>
               <RadioGroup
                 value={revealHints.revealColorCodes}
@@ -318,7 +358,9 @@ const MazeForm = () => {
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="none" id="reveal-color-codes-none" />
-                  <Label htmlFor="reveal-color-codes-none">None</Label>
+                  <Label htmlFor="reveal-color-codes-none">
+                    {t("form_reveal_color_codes_none")}
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem
@@ -326,24 +368,26 @@ const MazeForm = () => {
                     id="reveal-color-codes-usable"
                   />
                   <Label htmlFor="reveal-color-codes-usable">
-                    Usable Color Codes
+                    {t("form_usable_color_codes")}
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="used" id="reveal-color-codes-used" />
                   <Label htmlFor="reveal-color-codes-used">
-                    Used Color Codes
+                    {t("form_used_color_codes")}
                   </Label>
                 </div>
               </RadioGroup>
               <div className="mt-1 text-sm text-muted-foreground">
-                Choose which color codes to reveal in the maze output.
+                {t("form_choose_reveal_color_codes")}
               </div>
             </div>
 
             {/* Color Code Quantities Checkbox */}
             <div>
-              <label className="block text-sm font-medium">Hints</label>
+              <label className="block text-sm font-medium">
+                {t("form_hint")}
+              </label>
               <div>
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -357,16 +401,18 @@ const MazeForm = () => {
                       }))
                     }
                   />
-                  <label htmlFor="quantities">Color Code Quantities</label>
+                  <label htmlFor="quantities">
+                    {t("form_color_code_quantities")}
+                  </label>
                 </div>
                 {revealHints.revealColorCodes === "none" && (
                   <div className="flex items-center gap-2 text-sm text-destructive">
-                    <AlertTriangle size={16} /> Reveal Color Codes to enable
-                    this checkbox.
+                    <AlertTriangle size={16} />{" "}
+                    {t("form_reveal_color_codes_enable_checkbox")}
                   </div>
                 )}
                 <div className="text-sm text-muted-foreground">
-                  Displays the quantity next to each color code that is used.
+                  {t("form_display_quantity_next_to_color_code")}
                 </div>
               </div>
             </div>
@@ -382,11 +428,11 @@ const MazeForm = () => {
         >
           {isLoading ? (
             <div className="flex">
-              <Dices className="mr-2 animate-spin" /> Generate Maze
+              <Dices className="mr-2 animate-spin" /> {t("form_generate_maze")}
             </div>
           ) : (
             <div className="flex">
-              <Dices className="mr-2" /> Generate Maze
+              <Dices className="mr-2" /> {t("form_generate_maze")}
             </div>
           )}
         </Button>

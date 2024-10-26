@@ -45,9 +45,14 @@
 
 ### p0
 
-- UX: added Korean and Chinese simplified using next-international: https://docs.google.com/spreadsheets/d/1R3-hWtn4Krmn088SiIITLgav9V1oalo7tXeQHrucyY0/edit?gid=0#gid=0
+- fixed: emoji now appear correctly
+- fixed: there is no longer a delay in setting the locale dropdown to the current locale
 
 ## Change Log
+
+2024/10/26
+
+- UX: added Korean and Chinese simplified using next-international: https://docs.google.com/spreadsheets/d/1R3-hWtn4Krmn088SiIITLgav9V1oalo7tXeQHrucyY0/edit?gid=0#gid=0
 
 2024/10/24
 

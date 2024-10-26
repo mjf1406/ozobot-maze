@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "./ui/card";
+import { getI18n } from "locales/server";
 
-const OzobotComponent = () => {
+const OzobotComponent = async () => {
+  const t = await getI18n();
   return (
     <div className="flex items-center space-x-6">
       <Link
@@ -23,9 +25,7 @@ const OzobotComponent = () => {
       </Link>
 
       <Card className="relative max-w-sm rounded-full border-none bg-secondary p-6">
-        <p className="text-lg font-semibold">
-          Who&apos;s Ozobot? Well, I am! Click me to learn more!
-        </p>
+        <p className="text-lg font-semibold">{t("ozobot_speech")}</p>
         <div className="absolute -left-4 top-1/2 -translate-y-1/2 transform">
           <div className="h-0 w-0 border-b-8 border-r-8 border-t-8 border-b-transparent border-r-primary border-t-transparent"></div>
         </div>
