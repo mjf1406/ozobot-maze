@@ -55,6 +55,7 @@
 
 2024/10/27
 
+- algo: padding is now added to all color codes in Maze and Road Challenge
 - UX: added a loading state on the pdf generation
 - UX: generating scrolls to the generate button to allow the user to quickly regenerate without having to scroll up
 - algo: color codes are now randomly placed and stored in the object

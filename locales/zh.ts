@@ -50,7 +50,7 @@ export default {
   "form_color_code_quantities": "在颜色代码旁显示数量",
   "form_reveal_color_codes_enable_checkbox": "在显示颜色代码时启用数量。",
   "form_display_quantity_next_to_color_code": "在每个颜色代码旁显示其数量。",
-  "form_generate_maze": "生成迷宫",
+  "form_generate_maze": "生成",
   "form_type": "迷宫类型",
   "form_type_ozobot_maze": "Ozobot 迷宫",
   "form_type_ozobot_city_challenge": "Ozobot 城市挑战",

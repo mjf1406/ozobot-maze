@@ -1,5 +1,6 @@
 // lib/placeColorCodes.ts
 
+import { type Direction, directions } from "./generateMaze";
 import type { Cell, ColorCode } from "./generateOutput";
 
 // Units in millimeters
@@ -7,8 +8,8 @@ export const COLOR_CODE_GAP = 51;
 export const LINE_SIDE_WHITE_SPACE = 12;
 export const GRID_CELL_SIZE = 5; // in millimeters
 
-// Define possible directions
-export type Direction = 'top_to_bottom' | 'bottom_to_top' | 'left_to_right' | 'right_to_left';
+// New constant for minimum distance from the edge in grid cells
+export const MIN_EDGE_DISTANCE = 5;
 
 // Define the structure to save placed color code coordinates
 export type PlacedColorCode = {
@@ -33,9 +34,10 @@ export const placeColorCodes = (
   const placedColorCodes: PlacedColorCode[] = [];
 
   const isValidCell = (x: number, y: number, grid: Cell[][]): boolean => {
-    // Ensure the position is within grid bounds
-    if (x < MIN_WHITE_SPACE || y < MIN_WHITE_SPACE) return false;
-    if (x >= grid.length - MIN_WHITE_SPACE || grid[0] && y >= grid[0].length - MIN_WHITE_SPACE)
+    // Ensure the position is within grid bounds considering both white space and edge distance
+    if (x < MIN_WHITE_SPACE + MIN_EDGE_DISTANCE || y < MIN_WHITE_SPACE + MIN_EDGE_DISTANCE)
+      return false;
+    if (x >= grid.length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE || (grid[0] && y >= grid[0].length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE))
       return false;
 
     // Ensure the cell is not already occupied
@@ -63,7 +65,6 @@ export const placeColorCodes = (
   };
 
   const getRandomDirection = (): Direction => {
-    const directions: Direction[] = ['top_to_bottom', 'bottom_to_top', 'left_to_right', 'right_to_left'];
     return directions[Math.floor(Math.random() * directions.length)]!; // Type assertion
   };
 
@@ -110,20 +111,20 @@ export const placeColorCodes = (
         // Determine origin based on direction to ensure the color code fits within grid bounds
         switch (direction) {
           case 'top_to_bottom':
-            originX = getRandomInt(MIN_WHITE_SPACE, grid.length - MIN_WHITE_SPACE - 2); // -2 for three cells
-            if (grid[0]) originY = getRandomInt(MIN_WHITE_SPACE, grid[0].length - MIN_WHITE_SPACE);
+            originX = getRandomInt(MIN_WHITE_SPACE + MIN_EDGE_DISTANCE, grid.length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE - 2); // -2 for three cells
+            if (grid[0]) originY = getRandomInt(MIN_WHITE_SPACE + MIN_EDGE_DISTANCE, grid[0].length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE);
             break;
           case 'bottom_to_top':
-            originX = getRandomInt(MIN_WHITE_SPACE + 2, grid.length - MIN_WHITE_SPACE); // +2 to ensure space upwards
-            if (grid[0]) originY = getRandomInt(MIN_WHITE_SPACE, grid[0].length - MIN_WHITE_SPACE);
+            originX = getRandomInt(MIN_WHITE_SPACE + MIN_EDGE_DISTANCE + 2, grid.length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE); // +2 to ensure space upwards
+            if (grid[0]) originY = getRandomInt(MIN_WHITE_SPACE + MIN_EDGE_DISTANCE, grid[0].length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE);
             break;
           case 'left_to_right':
-            originX = getRandomInt(MIN_WHITE_SPACE, grid.length - MIN_WHITE_SPACE);
-            if (grid[0]) originY = getRandomInt(MIN_WHITE_SPACE, grid[0].length - MIN_WHITE_SPACE - 2); // -2 for three cells
+            originX = getRandomInt(MIN_WHITE_SPACE + MIN_EDGE_DISTANCE, grid.length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE);
+            if (grid[0]) originY = getRandomInt(MIN_WHITE_SPACE + MIN_EDGE_DISTANCE, grid[0].length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE - 2); // -2 for three cells
             break;
           case 'right_to_left':
-            originX = getRandomInt(MIN_WHITE_SPACE, grid.length - MIN_WHITE_SPACE);
-            if (grid[0]) originY = getRandomInt(MIN_WHITE_SPACE + 2, grid[0].length - MIN_WHITE_SPACE); // +2 to ensure space leftwards
+            originX = getRandomInt(MIN_WHITE_SPACE + MIN_EDGE_DISTANCE, grid.length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE);
+            if (grid[0]) originY = getRandomInt(MIN_WHITE_SPACE + MIN_EDGE_DISTANCE + 2, grid[0].length - MIN_WHITE_SPACE - MIN_EDGE_DISTANCE); // +2 to ensure space leftwards
             break;
         }
 

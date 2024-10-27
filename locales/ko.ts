@@ -50,7 +50,7 @@ export default {
   "form_color_code_quantities": "색상 코드 옆에 수량 표시",
   "form_reveal_color_codes_enable_checkbox": "색상 코드가 공개될 때 수량을 활성화하세요.",
   "form_display_quantity_next_to_color_code": "각 색상 코드 옆에 해당 색상 코드의 수를 표시하세요.",
-  "form_generate_maze": "미로 생성",
+  "form_generate_maze": "생성",
   "form_type": "미로 유형",
   "form_type_ozobot_maze": "오조봇 미로",
   "form_type_ozobot_city_challenge": "오조봇 시티 챌린지",

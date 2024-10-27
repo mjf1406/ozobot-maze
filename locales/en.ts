@@ -50,7 +50,7 @@ export default {
   "form_color_code_quantities": "Display quantities next to color codes",
   "form_reveal_color_codes_enable_checkbox": "Enable quantities when color codes are revealed.",
   "form_display_quantity_next_to_color_code": "Display the number of each color code next to it.",
-  "form_generate_maze": "Generate Maze",
+  "form_generate_maze": "Generate",
   "form_type": "Maze Type",
   "form_type_ozobot_maze": "Ozobot Maze",
   "form_type_ozobot_city_challenge": "Ozobot City Challenge",

@@ -308,7 +308,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                     row === 0 ? "border-t" : ""
                   } ${col === 0 ? "border-l" : ""} ${
                     !cell.color && "opacity-50"
-                  }`}
+                  } ${cell.color && "border-none"}`}
                 >
                   {/* Render cell content specific to Ozobot Road Challenge */}
                   <div
@@ -339,7 +339,17 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                 >
                   {/* Render cell content specific to Ozobot Maze */}
                   {/* You can customize this section as needed */}
-                  <span className="text-xs">{/* Optional Content */}</span>
+                  <div
+                    className={`text-7xs ${
+                      cell.color ? "text-white" : "text-black"
+                    }`}
+                  >
+                    {!cell.color && (
+                      <div>
+                        {row}, {col}
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             } else {

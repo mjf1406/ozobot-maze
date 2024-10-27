@@ -28,6 +28,12 @@ const tips = [
       "Instead of having the student complete the Ozobot Challenge, you could have them create an Ozobot Maze using the listed Color Codes and then pass it along to a classmate to try to gather all the stars.",
   },
   {
+    title: "Scaffolding",
+    desc: "It is recommended that you scaffold these activities for best results.",
+    content:
+      "The scaffolded approach has students completing Ozobot Mazes before they complete Ozobot Road Challenges before they complete Ozobot City Challenges. This approach might not work for all students, so try giving Ozobot Road Challenges to those that struggle with the Ozobot Mazes, then they can move onto Ozobot Mazes when they're ready.",
+  },
+  {
     title: "",
     desc: "",
     content: "",

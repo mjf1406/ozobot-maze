@@ -121,13 +121,13 @@ const mazeTypeOptions: Array<{
 }> = [
   { value: "ozobot_maze", labelKey: "form_type_ozobot_maze" },
   {
-    value: "ozobot_city_challenge",
-    labelKey: "form_type_ozobot_city_challenge",
-  }, // Added
-  {
     value: "ozobot_road_challenge",
     labelKey: "form_type_ozobot_road_challenge",
-  }, // Added
+  },
+  {
+    value: "ozobot_city_challenge",
+    labelKey: "form_type_ozobot_city_challenge",
+  },
 ];
 
 type RevealColorCodesOptions = "none" | "usable" | "used";

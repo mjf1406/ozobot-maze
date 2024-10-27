@@ -140,7 +140,6 @@ const getColorCodeQuantity = (usedColorCodes: ColorCode[], difficulty: Difficult
 } 
 
 const getRandomQuantity = ( difficulty: DifficultyOptions ) => {
-    console.log("🚀 ~ getRandomQuantity ~ difficulty:", difficulty)
     switch(difficulty) {
         case "easy-low":
             return 1
@@ -166,7 +165,6 @@ const getRandomQuantity = ( difficulty: DifficultyOptions ) => {
 }
 
 export const generateOutput = async (data: Omit<MazeData, "maze">): Promise<Maze> => {
-    console.log("🚀 ~ generateMaze ~ data:", data)
     const mazeText = "";
     let usedColorCodes: ColorCode[] = [];
     usedColorCodes = COLOR_CODES.filter(code => 
@@ -176,7 +174,7 @@ export const generateOutput = async (data: Omit<MazeData, "maze">): Promise<Maze
     const grid = generateGrid(data.pageSize, "landscape", 5)
     let maze
     const colorCodeQuantities: Record<string, number> = {};
-    if (data.mazeType === "ozobot_maze" || data.mazeType === "ozobot_road_challenge") maze = generateMaze(usedColorCodes, grid, data)
+    if (data.mazeType === "ozobot_maze" || data.mazeType === "ozobot_road_challenge") maze = await generateMaze(usedColorCodes, grid, data)
                         
     // Limit the number of color codes if totalCommands is specified
     if (data.totalCommands > 0 && data.totalCommands < usedColorCodes.length) {
@@ -188,7 +186,6 @@ export const generateOutput = async (data: Omit<MazeData, "maze">): Promise<Maze
         colorCodeQuantities[code.name] = code.quantity ?? 0;
     });
     
-    console.log("🚀 ~ generateMaze ~ grid:", grid)
     return {
         mazeText,
         usedColorCodes,
