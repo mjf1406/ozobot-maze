@@ -53,6 +53,13 @@
 
 ## Change Log
 
+2024/10/27
+
+- UX: improved interaction times to be sub ~150ms after a maze is in the dom
+- UI: loading state is not properly set when generating
+
+2024/10/26
+
 - UX: added a tips section just below the output
 - UX: added two types of generations: Ozobot Maze and Ozobot Challenge
 - algo: number of each Color Code is now randomly determined

@@ -132,8 +132,8 @@ const MazeForm = () => {
   } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     setIsLoading(true);
+    e.preventDefault();
     setIsFormSubmitted(false);
 
     const mazeData = {
@@ -147,14 +147,17 @@ const MazeForm = () => {
     };
 
     const maze = await generateMaze(mazeData);
+    console.log("🚀 ~ handleSubmit ~ maze:", maze);
 
-    setOutputData({
-      ...mazeData,
-      maze,
-    });
+    setTimeout(() => {
+      setOutputData({
+        ...mazeData,
+        maze,
+      });
 
-    setIsLoading(false);
-    setIsFormSubmitted(true);
+      setIsLoading(false);
+      setIsFormSubmitted(true);
+    }, 0);
   };
 
   // Scroll to output when form is submitted

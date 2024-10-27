@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Download, Square } from "lucide-react";
 import { Button } from "./ui/button";
 import { pixelifySans } from "~/app/fonts";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { COLOR_CODES, COLORS, getAbbreviation } from "~/lib/generateMaze";
@@ -14,6 +14,7 @@ import {
   type PaperSize,
 } from "~/lib/printingFunctions";
 import type { Maze, MazeTypeOptions } from "./MazeGeneratorForm";
+import React from "react";
 
 export type RevealColorCodesOptions = "none" | "usable" | "used";
 
@@ -83,7 +84,7 @@ const pageFormatMap = {
   "Ledger/Tabloid": "ledger",
 };
 
-const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
+const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleDownloadPDF = async () => {
@@ -135,7 +136,6 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
   };
 
   const { maze } = data;
-  console.log("🚀 ~ MazeGeneratorOutput ~ maze:", maze);
 
   // Get dimensions from pageSizes
   const [width, height] = (
@@ -231,6 +231,96 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
     );
   }
 
+  const mazeGridElement = useMemo(() => {
+    if (maze.grid && maze.grid.length > 0) {
+      return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${maze.grid[0]?.length ?? 0}, ${
+              5 * scale
+            }mm)`,
+            width: `${(maze.grid[0]?.length ?? 0) * 5 * scale}mm`,
+            height: `${maze.grid.length * 5 * scale}mm`,
+          }}
+        >
+          {maze.grid.flat().map((cell, index) => {
+            const numColumns = maze.grid[0]?.length ?? 0; // Number of columns in the grid
+            const numRows = maze.grid.length; // Number of rows in the grid
+            const row = Math.floor(index / numColumns); // Current row
+            const col = index % numColumns; // Current column
+
+            // Determine the key for each cell to ensure unique identification
+            const cellKey = `${row}-${col}`;
+
+            // Conditional rendering based on mazeType
+            if (data.mazeType === "ozobot_challenge") {
+              return (
+                <div
+                  key={cellKey}
+                  style={{
+                    width: `${5 * scale}mm`,
+                    height: `${5 * scale}mm`,
+                    backgroundColor: cell.color ?? COLORS.white,
+                  }}
+                  className={`flex items-center justify-center border-b border-r ${
+                    row === 0 ? "border-t" : ""
+                  } ${col === 0 ? "border-l" : ""}`}
+                >
+                  {/* Render cell content specific to Ozobot Challenge */}
+                  <div
+                    className={`text-7xs ${
+                      cell.color ? "text-white" : "text-black"
+                    }`}
+                  >
+                    {row}, {col}
+                  </div>
+                </div>
+              );
+            } else if (data.mazeType === "ozobot_maze") {
+              return (
+                <div
+                  key={cellKey}
+                  style={{
+                    width: `${5 * scale}mm`,
+                    height: `${5 * scale}mm`,
+                    backgroundColor: cell.color ?? COLORS.white,
+                  }}
+                  className={`flex items-center justify-center ${
+                    cell.color === COLORS.white && "border"
+                  }`}
+                >
+                  {/* Render cell content specific to Ozobot Maze */}
+                  {/* You can customize this section as needed */}
+                  <span className="text-xs">{/* Optional Content */}</span>
+                </div>
+              );
+            } else {
+              // Fallback rendering if mazeType is neither 'ozobot_challenge' nor 'ozobot_maze'
+              return (
+                <div
+                  key={cellKey}
+                  style={{
+                    width: `${5 * scale}mm`,
+                    height: `${5 * scale}mm`,
+                    backgroundColor: cell.color ?? COLORS.white,
+                  }}
+                  className={`flex items-center justify-center border-b border-r ${
+                    row === 0 ? "border-t" : ""
+                  } ${col === 0 ? "border-l" : ""}`}
+                >
+                  {/* Default cell content */}
+                  <span className="text-xs">{/* Optional Content */}</span>
+                </div>
+              );
+            }
+          })}
+        </div>
+      );
+    }
+    return null; // Return null if maze.grid is empty or undefined
+  }, [maze.grid, data.mazeType, scale]);
+
   return (
     <>
       <Card
@@ -280,90 +370,7 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
               } rounded-lg p-4 font-mono`}
             >
               {/* <pre>{maze.mazeText}</pre> */}
-              {maze.grid && maze.grid.length > 0 && (
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: `repeat(${maze.grid[0]?.length ?? 0}, ${5 * scale}mm)`,
-                    width: `${maze.grid[0]?.length ?? 0 * 5 * scale}mm`,
-                    height: `${maze.grid.length * 5 * scale}mm`,
-                  }}
-                >
-                  {maze.grid.flat().map((cell, index) => {
-                    const numColumns = maze.grid[0]?.length ?? 0; // Number of columns in the grid
-                    const numRows = maze.grid.length; // Number of rows in the grid
-                    const row = Math.floor(index / numColumns); // Current row
-                    const col = index % numColumns; // Current column
-
-                    // Determine the key for each cell to ensure unique identification
-                    const cellKey = `${row}-${col}`;
-
-                    // Conditional rendering based on mazeType
-                    if (data.mazeType === "ozobot_challenge") {
-                      return (
-                        <div
-                          key={cellKey}
-                          style={{
-                            width: `${5 * scale}mm`,
-                            height: `${5 * scale}mm`,
-                            backgroundColor: cell.color ?? COLORS.white,
-                          }}
-                          className={`flex items-center justify-center border-b border-r ${
-                            row === 0 ? "border-t" : ""
-                          } ${col === 0 ? "border-l" : ""}`}
-                        >
-                          {/* Render cell content specific to Ozobot Challenge */}
-                          <div
-                            className={`text-7xs ${cell.color ? "text-white" : "text-black"}`}
-                          >
-                            {row}, {col}
-                          </div>
-                        </div>
-                      );
-                    } else if (data.mazeType === "ozobot_maze") {
-                      return (
-                        <div
-                          key={cellKey}
-                          style={{
-                            width: `${5 * scale}mm`,
-                            height: `${5 * scale}mm`,
-                            backgroundColor: cell.color ?? COLORS.white,
-                          }}
-                          className={`flex items-center justify-center border-b border-r ${
-                            cell.color === COLORS.white && "border"
-                          }`}
-                        >
-                          {/* Render cell content specific to Ozobot Maze */}
-                          {/* You can customize this section as needed */}
-                          <span className="text-xs">
-                            {/* Optional Content */}
-                          </span>
-                        </div>
-                      );
-                    } else {
-                      // Fallback rendering if mazeType is neither 'ozobot_challenge' nor 'ozobot_maze'
-                      return (
-                        <div
-                          key={cellKey}
-                          style={{
-                            width: `${5 * scale}mm`,
-                            height: `${5 * scale}mm`,
-                            backgroundColor: cell.color ?? COLORS.white,
-                          }}
-                          className={`flex items-center justify-center border-b border-r ${
-                            row === 0 ? "border-t" : ""
-                          } ${col === 0 ? "border-l" : ""}`}
-                        >
-                          {/* Default cell content */}
-                          <span className="text-xs">
-                            {/* Optional Content */}
-                          </span>
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              )}
+              {mazeGridElement}
             </div>
           </div>
           <CardFooter className="text-5xs absolute -bottom-5 flex w-full flex-col items-center justify-center">
@@ -384,6 +391,8 @@ const MazeGeneratorOutput = ({ data }: { data: MazeData }) => {
       </Button>
     </>
   );
-};
+});
+
+MazeGeneratorOutput.displayName = "MazeGeneratorOutput";
 
 export default MazeGeneratorOutput;
