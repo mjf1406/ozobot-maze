@@ -49,5 +49,6 @@ export default {
   "form_type_ozobot_maze": "Ozobot 迷宫",
   "form_type_ozobot_challenge": "Ozobot 挑战",
   "form_type_desc": "Ozobot迷宫：在迷宫中导航，收集所有星星。Ozobot挑战：根据相应复选框的要求，尽可能多次使用颜色代码。",
-  "form_type_alert": "更改类型不会更新当前迷宫。请重新生成以应用新类型。"
+  "form_type_alert": "更改类型不会更新当前迷宫。请重新生成以应用新类型。",
+  "loading_message": "稍等一下！你的Ozobot正在飞速赶来——马上就到 😊",
 } as const;

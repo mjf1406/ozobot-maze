@@ -49,5 +49,6 @@ export default {
   "form_type_ozobot_maze": "Ozobot 미로",
   "form_type_ozobot_challenge": "Ozobot 챌린지",
   "form_type_desc": "Ozobot 미로: 모든 별을 수집하기 위해 미로를 탐색하세요. Ozobot 챌린지: 해당 체크박스가 요구하는 만큼 색상 코드를 사용하세요.",
-  "form_type_alert": "유형을 변경해도 현재 미로는 업데이트되지 않습니다. 새 유형을 적용하려면 다시 생성하세요."
+  "form_type_alert": "유형을 변경해도 현재 미로는 업데이트되지 않습니다. 새 유형을 적용하려면 다시 생성하세요.",
+  "loading_message": "잠시만 기다려 주세요! 오조봇이 달려오고 있어요—곧 도착합니다 😊",
 } as const;

@@ -55,6 +55,7 @@
 
 2024/10/27
 
+- UX: added loading.tsx with proper translations
 - UX: improved interaction times to be sub ~150ms after a maze is in the dom
 - UI: loading state is not properly set when generating
 

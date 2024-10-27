@@ -49,5 +49,6 @@ export default {
   "form_type_ozobot_maze": "Ozobot Maze",
   "form_type_ozobot_challenge": "Ozobot Challenge",
   "form_type_desc": "Ozobot Maze: Navigate a maze to collect all the stars. Ozobot Challenge: Use the Color Codes as many times as their corresponding checkboxes require.",
-  "form_type_alert": "Changing the type will not update the current maze. Please regenerate to apply the new type."
+  "form_type_alert": "Changing the type will not update the current maze. Please regenerate to apply the new type.",
+  "loading_message": "Hang tight! Your Ozobot is zipping its way over—just a moment more 😊",
 } as const;
