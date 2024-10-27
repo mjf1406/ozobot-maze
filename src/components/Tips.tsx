@@ -38,7 +38,7 @@ const Tips = async () => {
   const t = await getI18n();
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-6 py-6">
+    <div className="flex flex-col items-center justify-center gap-6 py-6 md:max-w-xl lg:max-w-4xl">
       <h2
         className={`mb-5 text-center text-3xl font-semibold ${pixelifySans.className}`}
       >

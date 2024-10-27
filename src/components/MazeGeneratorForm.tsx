@@ -13,14 +13,14 @@ import { Label } from "./ui/label";
 import { pixelifySans } from "~/app/fonts";
 import { AlertTriangle, Dices, X } from "lucide-react";
 import NumberInput from "./ui/number-input";
-import {
-  type Cell,
-  COLOR_CODES,
-  generateMaze,
-  getAbbreviation,
-} from "~/lib/generateMaze";
 import type { PaperSize } from "~/lib/printingFunctions";
 import { useI18n } from "locales/client";
+import {
+  COLOR_CODES,
+  type Cell,
+  generateOutput,
+  getAbbreviation,
+} from "~/lib/generateOutput";
 
 export type TranslationKey =
   | "form_title"
@@ -34,9 +34,15 @@ export type TranslationKey =
   | "form_page_size_alert"
   | "form_page_size_desc"
   | "form_difficulty"
+  | "difficulty_very_easy"
   | "difficulty_easy"
+  | "difficulty_easy_medium"
   | "difficulty_medium"
+  | "difficulty_medium_hard"
   | "difficulty_hard"
+  | "difficulty_very_hard"
+  | "difficulty_super_hard"
+  | "difficulty_extreme"
   | "difficulty_custom"
   | "form_difficulty_alert"
   | "form_difficulty_desc"
@@ -52,11 +58,12 @@ export type TranslationKey =
   | "form_reveal_color_codes_enable_checkbox"
   | "form_display_quantity_next_to_color_code"
   | "form_generate_maze"
-  // New Translation Keys for Type Field
   | "form_type"
   | "form_type_ozobot_maze"
-  | "form_type_ozobot_challenge"
-  | "form_type_alert"; // New Alert Key
+  | "form_type_ozobot_city_challenge" // Updated TranslationKey
+  | "form_type_ozobot_road_challenge" // Added TranslationKey
+  | "form_type_alert"
+  | "form_type_desc"; // Added TranslationKey for description
 
 const PaperSizeOptions: Array<{ value: PaperSize; labelKey: TranslationKey }> =
   [
@@ -66,10 +73,23 @@ const PaperSizeOptions: Array<{ value: PaperSize; labelKey: TranslationKey }> =
     { value: "Legal", labelKey: "form_page_size_Legal" },
   ];
 
-export type DifficultyOptions = "easy" | "medium" | "hard" | "custom";
+export type DifficultyOptions =
+  | "easy-low"
+  | "easy"
+  | "easy-medium"
+  | "medium"
+  | "medium-hard"
+  | "hard"
+  | "hard-high"
+  | "hard-super"
+  | "hard-extreme"
+  | "custom";
 
-// New Type Options
-export type MazeTypeOptions = "ozobot_maze" | "ozobot_challenge";
+// Updated MazeTypeOptions to include new types
+export type MazeTypeOptions =
+  | "ozobot_maze"
+  | "ozobot_city_challenge"
+  | "ozobot_road_challenge";
 
 export type Maze = {
   mazeText: string;
@@ -82,19 +102,32 @@ const difficultyOptions: Array<{
   value: DifficultyOptions;
   labelKey: TranslationKey;
 }> = [
+  { value: "easy-low", labelKey: "difficulty_very_easy" },
   { value: "easy", labelKey: "difficulty_easy" },
+  { value: "easy-medium", labelKey: "difficulty_easy_medium" },
   { value: "medium", labelKey: "difficulty_medium" },
+  { value: "medium-hard", labelKey: "difficulty_medium_hard" },
   { value: "hard", labelKey: "difficulty_hard" },
+  { value: "hard-high", labelKey: "difficulty_very_hard" },
+  { value: "hard-super", labelKey: "difficulty_super_hard" },
+  { value: "hard-extreme", labelKey: "difficulty_extreme" },
   { value: "custom", labelKey: "difficulty_custom" },
 ];
 
-// New Type Options Array
+// Updated mazeTypeOptions array to include new types with corresponding labelKeys
 const mazeTypeOptions: Array<{
   value: MazeTypeOptions;
   labelKey: TranslationKey;
 }> = [
   { value: "ozobot_maze", labelKey: "form_type_ozobot_maze" },
-  { value: "ozobot_challenge", labelKey: "form_type_ozobot_challenge" },
+  {
+    value: "ozobot_city_challenge",
+    labelKey: "form_type_ozobot_city_challenge",
+  }, // Added
+  {
+    value: "ozobot_road_challenge",
+    labelKey: "form_type_ozobot_road_challenge",
+  }, // Added
 ];
 
 type RevealColorCodesOptions = "none" | "usable" | "used";
@@ -115,11 +148,11 @@ const MazeForm = () => {
     revealColorCodes: "none",
     quantities: false,
   });
-  const [mazeType, setMazeType] = useState<MazeTypeOptions>("ozobot_maze"); // New State
+  const [mazeType, setMazeType] = useState<MazeTypeOptions>("ozobot_maze"); // Updated default state
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // New state to hold the data used to generate the output
+  // Updated outputData type to include the new mazeType
   const [outputData, setOutputData] = useState<{
     title: string;
     pageSize: PaperSize;
@@ -146,7 +179,7 @@ const MazeForm = () => {
       mazeType,
     };
 
-    const maze = await generateMaze(mazeData);
+    const maze = await generateOutput(mazeData);
     console.log("🚀 ~ handleSubmit ~ maze:", maze);
 
     setTimeout(() => {
@@ -163,7 +196,7 @@ const MazeForm = () => {
   // Scroll to output when form is submitted
   useEffect(() => {
     if (isFormSubmitted) {
-      const outputElement = document.getElementById("output");
+      const outputElement = document.getElementById("generate");
       if (outputElement) {
         outputElement.scrollIntoView({ behavior: "smooth" });
       }
@@ -181,9 +214,12 @@ const MazeForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revealHints.revealColorCodes]);
 
-  // Effect to update revealHints based on mazeType
+  // Updated effect to handle new maze types
   useEffect(() => {
-    if (mazeType === "ozobot_challenge") {
+    if (
+      mazeType === "ozobot_city_challenge" ||
+      mazeType === "ozobot_road_challenge"
+    ) {
       setRevealHints({
         revealColorCodes: "used",
         quantities: true,
@@ -224,7 +260,7 @@ const MazeForm = () => {
           </div>
         </div>
 
-        {/* New Type RadioGroup */}
+        {/* Updated Maze Type RadioGroup */}
         <div>
           <label className="block text-sm font-medium">{t("form_type")}</label>
           <RadioGroup
@@ -253,7 +289,8 @@ const MazeForm = () => {
               </div>
             )}
           <div className="mt-1 text-sm text-muted-foreground">
-            {t("form_type_desc")}
+            {t("form_type_desc")}{" "}
+            {/* Ensure this key exists in your translations */}
           </div>
         </div>
 
@@ -299,7 +336,7 @@ const MazeForm = () => {
           </label>
           <RadioGroup
             value={difficulty}
-            className="mt-1"
+            className="mt-1 flex flex-wrap"
             onValueChange={(value) => setDifficulty(value as DifficultyOptions)}
           >
             {difficultyOptions.map((option) => (
@@ -500,6 +537,7 @@ const MazeForm = () => {
           className={`${pixelifySans.className} w-full text-2xl`}
           type="submit"
           size={"lg"}
+          id="generate"
           disabled={isLoading}
         >
           {isLoading ? (

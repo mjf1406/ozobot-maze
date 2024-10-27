@@ -7,14 +7,18 @@ import { pixelifySans } from "~/app/fonts";
 import { useMemo, useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { COLOR_CODES, COLORS, getAbbreviation } from "~/lib/generateMaze";
 import {
   createScalingObject,
   DPI,
   type PaperSize,
 } from "~/lib/printingFunctions";
-import type { Maze, MazeTypeOptions } from "./MazeGeneratorForm";
+import type {
+  DifficultyOptions,
+  Maze,
+  MazeTypeOptions,
+} from "./MazeGeneratorForm";
 import React from "react";
+import { COLOR_CODES, getAbbreviation, COLORS } from "~/lib/generateOutput";
 
 export type RevealColorCodesOptions = "none" | "usable" | "used";
 
@@ -26,7 +30,7 @@ export type RevealHintsOptions = {
 export type MazeData = {
   title: string;
   pageSize: PaperSize;
-  difficulty: string;
+  difficulty: DifficultyOptions;
   customCommands: string[];
   totalCommands: number;
   revealHints: RevealHintsOptions;
@@ -254,7 +258,30 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
             const cellKey = `${row}-${col}`;
 
             // Conditional rendering based on mazeType
-            if (data.mazeType === "ozobot_challenge") {
+            if (data.mazeType === "ozobot_city_challenge") {
+              return (
+                <div
+                  key={cellKey}
+                  style={{
+                    width: `${5 * scale}mm`,
+                    height: `${5 * scale}mm`,
+                    backgroundColor: cell.color ?? COLORS.white,
+                  }}
+                  className={`flex items-center justify-center border-b border-r opacity-50 ${
+                    row === 0 ? "border-t" : ""
+                  } ${col === 0 ? "border-l" : ""}`}
+                >
+                  {/* Render cell content specific to Ozobot City Challenge */}
+                  <div
+                    className={`text-7xs ${
+                      cell.color ? "text-white" : "text-black"
+                    }`}
+                  >
+                    {row}, {col}
+                  </div>
+                </div>
+              );
+            } else if (data.mazeType === "ozobot_road_challenge") {
               return (
                 <div
                   key={cellKey}
@@ -265,15 +292,19 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                   }}
                   className={`flex items-center justify-center border-b border-r ${
                     row === 0 ? "border-t" : ""
-                  } ${col === 0 ? "border-l" : ""}`}
+                  } ${col === 0 ? "border-l" : ""} ${!cell.color && "opacity-50"}`}
                 >
-                  {/* Render cell content specific to Ozobot Challenge */}
+                  {/* Render cell content specific to Ozobot Road Challenge */}
                   <div
                     className={`text-7xs ${
                       cell.color ? "text-white" : "text-black"
                     }`}
                   >
-                    {row}, {col}
+                    {!cell.color && (
+                      <div>
+                        {row}, {col}
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -296,7 +327,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                 </div>
               );
             } else {
-              // Fallback rendering if mazeType is neither 'ozobot_challenge' nor 'ozobot_maze'
+              // Fallback rendering if mazeType is none of the above
               return (
                 <div
                   key={cellKey}
@@ -339,12 +370,19 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
             <div>
               <div className="text-sm font-semibold">
                 {data.title} Ozobot{" "}
-                {data.mazeType === "ozobot_challenge" ? "Challenge" : "Maze"}
+                {data.mazeType === "ozobot_city_challenge"
+                  ? "City Challenge"
+                  : data.mazeType === "ozobot_road_challenge"
+                    ? "Road Challenge"
+                    : "Maze"}{" "}
+                <span className="text-2xs">({data.difficulty})</span>
               </div>
               <div className="text-4xs text-muted-foreground">
-                {data.mazeType === "ozobot_challenge"
-                  ? "Create a path for Ozobot using all the Color Codes below! Plan your path in pencil first, then double and triple check it!"
-                  : "Help Ozobot collect all the ⭐! Plan your Color Codes in pencil first, then double and triple check them!"}
+                {data.mazeType === "ozobot_city_challenge"
+                  ? "Create a path for Ozobot in the city using all the Color Codes below! Plan your path in pencil first, then double and triple check it!"
+                  : data.mazeType === "ozobot_road_challenge"
+                    ? "Navigate Ozobot through each Color Codes on the grid! Ensure your path is well-planned in pencil before coloring in the black lines."
+                    : "Help Ozobot collect all the ⭐! Plan your Color Codes in pencil first, then double and triple check them!"}
               </div>
             </div>
             <div className="flex flex-col items-end">

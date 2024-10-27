@@ -27,7 +27,7 @@ export default async function HomePage({ params }: PageProps) {
         {t("app_title")}
       </h1>
       <OzobotComponent />
-      <LocaleSwitcher currentLocale={currentLocale} />
+      {/* <LocaleSwitcher currentLocale={currentLocale} /> */}
       <span id="form">
         <MazeForm />
       </span>
