@@ -1,6 +1,6 @@
 // lib/generateMaze.ts
 
-import { MazeData } from "~/components/MazeGeneratorOutput";
+import type { MazeData } from "~/components/MazeGeneratorOutput";
 import type { Cell, ColorCode } from "./generateOutput";
 import { placeColorCodes, type PlacedColorCode } from "./placeColorCodes";
 

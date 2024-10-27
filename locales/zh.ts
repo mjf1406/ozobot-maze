@@ -58,4 +58,6 @@ export default {
   "form_type_alert": "迷宫类型已更改。请重新生成迷宫。",
   "form_type_desc": "Ozobot 迷宫：导航迷宫以收集所有星星。Ozobot 城市挑战：根据对应的复选框要求多次使用颜色代码。Ozobot 道路挑战：在网格上连接颜色代码，引导 Ozobot 穿过道路。",
   "loading_message": "稍等一下！你的Ozobot正在飞速赶来——马上就到 😊",
+  "download_pdf": "下载PDF",
+  "downloading_pdf": "下载中……",
 } as const;

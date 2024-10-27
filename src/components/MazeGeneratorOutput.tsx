@@ -1,10 +1,12 @@
 // components/MazeGeneratorOutput.tsx
 
+"use client";
+
+import React, { useMemo, useRef, useState } from "react";
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
-import { Download, Square } from "lucide-react";
+import { Download, Square, Loader2 } from "lucide-react"; // Import Loader2 for the spinner
 import { Button } from "./ui/button";
 import { pixelifySans } from "~/app/fonts";
-import { useMemo, useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
@@ -17,8 +19,8 @@ import type {
   Maze,
   MazeTypeOptions,
 } from "./MazeGeneratorForm";
-import React from "react";
 import { COLOR_CODES, getAbbreviation, COLORS } from "~/lib/generateOutput";
+import { useI18n } from "locales/client";
 
 export type RevealColorCodesOptions = "none" | "usable" | "used";
 
@@ -90,52 +92,64 @@ const pageFormatMap = {
 
 const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const t = useI18n();
 
   const handleDownloadPDF = async () => {
     if (cardRef.current) {
-      // Select all abbreviation divs within cardRef.current
-      const abbreviationDivs =
-        cardRef.current.querySelectorAll(".abbreviation-div");
-      abbreviationDivs.forEach((div) => {
-        div.classList.add("pb-2");
-      });
+      setIsLoading(true); // Start loading
 
-      const iconDivs = cardRef.current.querySelectorAll(".icons-div");
-      iconDivs.forEach((div) => {
-        div.classList.add("mt-1");
-      });
+      try {
+        // Select all abbreviation divs within cardRef.current
+        const abbreviationDivs =
+          cardRef.current.querySelectorAll(".abbreviation-div");
+        abbreviationDivs.forEach((div) => {
+          div.classList.add("pb-2");
+        });
 
-      // Wait for the DOM to update
-      await new Promise((resolve) => setTimeout(resolve, 0));
+        const iconDivs = cardRef.current.querySelectorAll(".icons-div");
+        iconDivs.forEach((div) => {
+          div.classList.add("mt-1");
+        });
 
-      // Generate the canvas
-      const canvas = await html2canvas(cardRef.current, { scale: 2 });
-      const imgData = canvas.toDataURL("image/png");
+        // Wait for the DOM to update
+        await new Promise((resolve) => setTimeout(resolve, 0));
 
-      // Remove 'pb-2' class after generating the canvas
-      abbreviationDivs.forEach((div) => {
-        div.classList.remove("pb-2");
-      });
-      iconDivs.forEach((div) => {
-        div.classList.remove("mt-1");
-      });
+        // Generate the canvas
+        const canvas = await html2canvas(cardRef.current, { scale: 2 });
+        const imgData = canvas.toDataURL("image/png");
 
-      const scaling = createScalingObject(data.pageSize, DPI.PRINT_MEDIUM);
+        // Remove 'pb-2' and 'mt-1' classes after generating the canvas
+        abbreviationDivs.forEach((div) => {
+          div.classList.remove("pb-2");
+        });
+        iconDivs.forEach((div) => {
+          div.classList.remove("mt-1");
+        });
 
-      // Continue with PDF generation
-      const pageFormat = pageFormatMap[data.pageSize as PageSizeFormat] || "a4";
+        const scaling = createScalingObject(data.pageSize, DPI.PRINT_MEDIUM);
 
-      const pdf = new jsPDF({
-        orientation: "landscape", // Ensure landscape orientation
-        unit: "pt",
-        format: pageFormat,
-      });
+        // Continue with PDF generation
+        const pageFormat =
+          pageFormatMap[data.pageSize as PageSizeFormat] || "a4";
 
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
+        const pdf = new jsPDF({
+          orientation: "landscape", // Ensure landscape orientation
+          unit: "pt",
+          format: pageFormat,
+        });
 
-      pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
-      pdf.save(`${data.title || "maze"}.pdf`);
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
+        pdf.save(`${data.title || "maze"}.pdf`);
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        // Optionally, you can add error handling UI here
+      } finally {
+        setIsLoading(false); // End loading
+      }
     }
   };
 
@@ -292,7 +306,9 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                   }}
                   className={`flex items-center justify-center border-b border-r ${
                     row === 0 ? "border-t" : ""
-                  } ${col === 0 ? "border-l" : ""} ${!cell.color && "opacity-50"}`}
+                  } ${col === 0 ? "border-l" : ""} ${
+                    !cell.color && "opacity-50"
+                  }`}
                 >
                   {/* Render cell content specific to Ozobot Road Challenge */}
                   <div
@@ -420,12 +436,22 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
         </CardContent>
       </Card>
       <Button
-        className={`${pixelifySans.className} text-2xl`}
-        type="submit"
+        className={`${pixelifySans.className} flex items-center justify-center text-2xl`}
+        type="button" // Changed to "button" to prevent form submission
         size={"lg"}
         onClick={handleDownloadPDF}
+        disabled={isLoading} // Disable the button when loading
       >
-        <Download className="mr-2" /> Download PDF
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 animate-spin" /> {/* Spinner Icon */}
+            {t("downloading_pdf")}
+          </>
+        ) : (
+          <>
+            <Download className="mr-2" /> {t("download_pdf")}
+          </>
+        )}
       </Button>
     </>
   );

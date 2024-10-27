@@ -55,12 +55,13 @@
 
 2024/10/27
 
+- UX: added a loading state on the pdf generation
 - UX: generating scrolls to the generate button to allow the user to quickly regenerate without having to scroll up
 - algo: color codes are now randomly placed and stored in the object
 - UI: added Ozobot Road Challenge and changed Ozobot Challenge to Ozobot City Challenge
 - UX: added loading.tsx with proper translations
 - UX: improved interaction times to be sub ~150ms after a maze is in the dom
-- UI: loading state is not properly set when generating
+- UI: loading state is now properly set when generating
 
 2024/10/26
 

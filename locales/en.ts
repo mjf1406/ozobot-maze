@@ -58,4 +58,6 @@ export default {
   "form_type_alert": "Maze type has changed. Please regenerate the maze.",
   "form_type_desc": "Ozobot Maze: Navigate a maze to collect all the stars. Ozobot City Challenge: Use the Color Codes as many times as their corresponding checkboxes require. Ozobot Road Challenge: Connect Color Codes on the grid to guide the Ozobot through the roads.",
   "loading_message": "Hang tight! Your Ozobot is zipping its way over—just a moment more 😊",
+  "download_pdf": "Download PDF",
+  "downloading_pdf": "Downloading...",
 } as const;
