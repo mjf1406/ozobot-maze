@@ -29,23 +29,23 @@
 - Output
   - How wide is the Bit black line?
   - Option to reveal the required commands with or without the quantities
-
-### p1
-
-- algo: Ozobot constraints implemented
-  - [ ] at least 25mm between any parallel tracks
+- algo: Ozobot constraints implemented for the maze to be solvable
   - [ ] Zigzag and Backwalk require at least 64mm after to pick up another color code
   - [ ] Line Switch Left/Right require a parallel line next to tit
   - [ ] Line Switch Straight requires a perpendicular line
+  - [ ] color codes are 5mm x 5mm
+  - [ ] curves must have a minimum diameter of 25mm
+  - [ ] add a calibration circle to each maze: 39mm diameter
+
+### p1
+
+- algo: Ozobot constraints implemented just to connect every command
+  - [ ] at least 25mm between any parallel tracks
   - [ ] At least 51mm between color codes
   - [ ] there must be at least 25mm from a corner/intersection before another corner/intersection/color code
   - [ ] line that end in a color must have a safe area with a diameter of 20mm starting from the end of the line
-  - [ ] color codes are 5mm x 5mm
-  - [ ] line thickness
   - [ ] each side of a line must have at least 12mm of white space
-  - [ ] curves must have a minimum diameter of 25mm
   - [ ] corner minimum angel is 90deg
-  - [ ] add a calibration circle to each maze: 39mm diameter
 
 ### p0
 

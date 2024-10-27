@@ -26,9 +26,26 @@ export const generateMaze = async (
   const { grid: updatedGrid, placedColorCodes } = placeColorCodes(usedColorCodes, grid);
   console.log("🚀 ~ placedColorCodes:", placedColorCodes)
   if (data.mazeType === "ozobot_maze") {
-      // TODO: Implement connection logic between color codes with black lines within constraints
+    /*
+    TODO: Implement connection logic between color codes with black lines within constraints
+      - [ ] at least 25mm between any parallel tracks
+      - [ ] At least 51mm between color codes
+      - [ ] there must be at least 25mm from a corner/intersection before another corner/intersection/color code
+      - [ ] line that end in a color must have a safe area with a diameter of 20mm starting from the end of the line
+      - [ ] each side of a line must have at least 12mm of white space
+      - [ ] corner minimum angel is 90deg
+    */
     
-      // TODO: Add erroneous black lines to fool the user
+      
+    /*
+    TODO: Add erroneous black lines to fool the user
+      - [ ] at least 25mm between any parallel tracks
+      - [ ] At least 51mm between color codes
+      - [ ] there must be at least 25mm from a corner/intersection before another corner/intersection/color code
+      - [ ] line that end in a color must have a safe area with a diameter of 20mm starting from the end of the line
+      - [ ] each side of a line must have at least 12mm of white space
+      - [ ] corner minimum angel is 90deg
+    */
 
   }
 
