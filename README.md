@@ -51,11 +51,15 @@
 
 - UX: added translations for Tips in ko and zhs
 - UX: work on adding instructions for each activity type as a teaching resource
+- UI: add custom difficulty
+  - [ ] add quantity next to each Color Code that is selected
+  - [ ] remove the total as they set the quantity for each Color Code
 
 ## Change Log
 
 2024/10/28
 
+- algo: adjusted difficulty to be better organized and pulled from data, removing the switch from the getRandomQuantity function
 - UI: added a link to instruction printables for each activity
 - UI: increased the size of the grid cell to 6mm and then 7mm to print test sheets
 - tips: fixed the phrasing now that we have 3 types of activities

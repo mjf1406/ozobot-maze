@@ -2,7 +2,8 @@
 
 import type { DifficultyOptions, Maze } from "~/components/MazeGeneratorForm";
 import type { MazeData } from "~/components/MazeGeneratorOutput";
-import { generateMaze, GRID_CELL_SIZE } from "./generateMaze";
+import { generateMaze } from "./generateMaze";
+import { getRandomNumber } from "./utils";
 
 type ColorName = 'red' | 'green' | 'blue' | 'black' | 'white';
 
@@ -72,6 +73,46 @@ export const COLOR_CODES: ColorCode[] = [
     },
 ];
 
+export const DIFFICULTIES = {
+    "easy-low": {
+        min: 1,
+        max: 1,
+    },
+    "easy": {
+        min: 1,
+        max: 2,
+    },
+    "easy-medium": {
+        min: 2,
+        max: 4,
+    },
+    "medium": {
+        min: 1,
+        max: 2,
+    },
+    "medium-hard": {
+        min: 1,
+        max: 3,
+    },
+    "hard": {
+        min: 1,
+        max: 2,
+    },
+    "hard-high": {
+        min: 1,
+        max: 3,
+    },
+    "hard-super": {
+        min: 2,
+        max: 4,
+    },
+    "hard-extreme": {
+        min: 2,
+        max: 5,
+    },
+}
+
+// GRID_CELL_SIZE = 5
 // export const MODIFIERS = {
 //   A4: { height: 0.99, width: 1.20 },       
 //   A3: { height: 1.07, width: 1.21 },
@@ -79,6 +120,7 @@ export const COLOR_CODES: ColorCode[] = [
 //   Legal: { height: 1.05, width: 1.25 },
 // }
 
+// GRID_CELL_SIZE = 6
 export const MODIFIERS = {
     A4: { height: 0.82, width: 1.0 },
     A3: { height: 0.88, width: 1.02 },
@@ -86,37 +128,13 @@ export const MODIFIERS = {
     Legal: { height: 0.88, width: 1.05 },
 };
 
+// GRID_CELL_SIZE = 7
 // export const MODIFIERS = {
 //     A4: { height: 0.7, width: 0.85 },       
 //     A3: { height: 0.76, width: 0.86 },
 //     Letter: { height: 0.76, width: 0.89 },       
 //     Legal: { height: 0.75, width: 0.89 },
-// }
-
-  
-
-// const calculateModifiers = (gridSize: number) => {
-//     return {
-//         A4: {
-//         height: (-0.145 * gridSize) + 1.715,
-//         width: (-0.175 * gridSize) + 2.075,
-//         },
-//         A3: {
-//         height: (-0.155 * gridSize) + 1.845,
-//         width: (-0.175 * gridSize) + 2.085,
-//         },
-//         Letter: {
-//         height: (-0.145 * gridSize) + 1.775,
-//         width: (-0.180 * gridSize) + 2.150,
-//         },
-//         Legal: {
-//         height: (-0.150 * gridSize) + 1.800,
-//         width: (-0.180 * gridSize) + 2.150,
-//         },
-//     };
-// };
-  
-// const MODIFIERS = calculateModifiers(GRID_CELL_SIZE);  
+// }  
 
 export type PaperSize = 'A4' | 'A3' | 'Letter' | 'Legal';
 
@@ -178,28 +196,11 @@ const getColorCodeQuantity = (usedColorCodes: ColorCode[], difficulty: Difficult
 } 
 
 const getRandomQuantity = ( difficulty: DifficultyOptions ) => {
-    switch(difficulty) {
-        case "easy-low":
-            return 1
-        case "easy":
-            return Math.floor(Math.random() * 2) + 1;
-        case "easy-medium":
-            return Math.floor(Math.random() * 3) + 1;
-        case "medium":
-            return Math.floor(Math.random() * 4) + 1;
-        case "medium-hard":
-            return Math.floor(Math.random() * 5) + 1;
-        case "hard":
-            return Math.floor(Math.random() * 6) + 1;
-        case "hard-high":
-            return Math.floor(Math.random() * 8) + 1;
-        case "hard-super":
-            return Math.floor(Math.random() * 9) + 1;
-        case "hard-extreme":
-            return Math.floor(Math.random() * 10) + 1;
-        case "custom":
-            return Math.floor(Math.random() * 5) + 1; // TODO: add ui for this so the user can set the max and min
+    if (difficulty != "custom") {
+        const numbers = DIFFICULTIES[difficulty]
+        return getRandomNumber(numbers.min, numbers.max)
     }
+    // TODO: custom
 }
 
 export const generateOutput = async (data: Omit<MazeData, "maze">): Promise<Maze> => {

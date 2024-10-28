@@ -111,7 +111,7 @@ const difficultyOptions: Array<{
   { value: "hard-high", labelKey: "difficulty_very_hard" },
   { value: "hard-super", labelKey: "difficulty_super_hard" },
   { value: "hard-extreme", labelKey: "difficulty_extreme" },
-  { value: "custom", labelKey: "difficulty_custom" },
+  // { value: "custom", labelKey: "difficulty_custom" }, // TODO: Implement this
 ];
 
 // Updated mazeTypeOptions array to include new types with corresponding labelKeys
