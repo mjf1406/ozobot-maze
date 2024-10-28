@@ -56,6 +56,7 @@
 
 2024/10/28
 
+- UI: added a link to instruction printables for each activity
 - UI: increased the size of the grid cell to 6mm and then 7mm to print test sheets
 - tips: fixed the phrasing now that we have 3 types of activities
 - UI: coordinates only render every 5 cells now and are labeled on all axes
@@ -82,7 +83,8 @@
 - algo: number of each Color Code is now randomly determined
 - fixed: flags now appear correctly in LocaleSwitcher
 - fixed: there is no longer a delay in setting the locale dropdown to the current locale
-  2024/10/26
+
+2024/10/26
 
 - UX: added Korean and Chinese simplified using next-international: https://docs.google.com/spreadsheets/d/1R3-hWtn4Krmn088SiIITLgav9V1oalo7tXeQHrucyY0/edit?gid=0#gid=0
 
