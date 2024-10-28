@@ -1,9 +1,8 @@
 // lib/generateMaze.ts
 
-import { unescape } from "querystring";
 import type { DifficultyOptions, Maze } from "~/components/MazeGeneratorForm";
 import type { MazeData } from "~/components/MazeGeneratorOutput";
-import { generateMaze } from "./generateMaze";
+import { generateMaze, GRID_CELL_SIZE } from "./generateMaze";
 
 type ColorName = 'red' | 'green' | 'blue' | 'black' | 'white';
 
@@ -73,12 +72,51 @@ export const COLOR_CODES: ColorCode[] = [
     },
 ];
 
+// export const MODIFIERS = {
+//   A4: { height: 0.99, width: 1.20 },       
+//   A3: { height: 1.07, width: 1.21 },
+//   Letter: { height: 1.05, width: 1.25 },       
+//   Legal: { height: 1.05, width: 1.25 },
+// }
+
 export const MODIFIERS = {
-  A4: { height: 0.86, width: 1.15 },       
-  A3: { height: 0.98, width: 1.19 },
-  Letter: { height: 0.93, width: 1.2 },       
-  Legal: { height: 0.93, width: 1.21 },
-}
+    A4: { height: 0.82, width: 1.0 },
+    A3: { height: 0.88, width: 1.02 },
+    Letter: { height: 0.87, width: 1.05 },
+    Legal: { height: 0.88, width: 1.05 },
+};
+
+// export const MODIFIERS = {
+//     A4: { height: 0.7, width: 0.85 },       
+//     A3: { height: 0.76, width: 0.86 },
+//     Letter: { height: 0.76, width: 0.89 },       
+//     Legal: { height: 0.75, width: 0.89 },
+// }
+
+  
+
+// const calculateModifiers = (gridSize: number) => {
+//     return {
+//         A4: {
+//         height: (-0.145 * gridSize) + 1.715,
+//         width: (-0.175 * gridSize) + 2.075,
+//         },
+//         A3: {
+//         height: (-0.155 * gridSize) + 1.845,
+//         width: (-0.175 * gridSize) + 2.085,
+//         },
+//         Letter: {
+//         height: (-0.145 * gridSize) + 1.775,
+//         width: (-0.180 * gridSize) + 2.150,
+//         },
+//         Legal: {
+//         height: (-0.150 * gridSize) + 1.800,
+//         width: (-0.180 * gridSize) + 2.150,
+//         },
+//     };
+// };
+  
+// const MODIFIERS = calculateModifiers(GRID_CELL_SIZE);  
 
 export type PaperSize = 'A4' | 'A3' | 'Letter' | 'Legal';
 

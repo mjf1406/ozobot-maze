@@ -1,12 +1,11 @@
 // lib/placeColorCodes.ts
 
-import { type Direction, directions } from "./generateMaze";
+import { type Direction, directions, GRID_CELL_SIZE } from "./generateMaze";
 import type { Cell, ColorCode } from "./generateOutput";
 
 // Units in millimeters
 export const COLOR_CODE_GAP = 51;
 export const LINE_SIDE_WHITE_SPACE = 12;
-export const GRID_CELL_SIZE = 5; // in millimeters
 
 // New constant for minimum distance from the edge in grid cells
 export const MIN_EDGE_DISTANCE = 5;

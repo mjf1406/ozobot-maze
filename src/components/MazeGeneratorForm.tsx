@@ -119,11 +119,11 @@ const mazeTypeOptions: Array<{
   value: MazeTypeOptions;
   labelKey: TranslationKey;
 }> = [
-  { value: "ozobot_maze", labelKey: "form_type_ozobot_maze" },
   {
     value: "ozobot_road_challenge",
     labelKey: "form_type_ozobot_road_challenge",
   },
+  { value: "ozobot_maze", labelKey: "form_type_ozobot_maze" },
   {
     value: "ozobot_city_challenge",
     labelKey: "form_type_ozobot_city_challenge",

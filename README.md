@@ -53,6 +53,16 @@
 
 ## Change Log
 
+2024/10/28
+
+- UI: increased the size of the grid cell to 6mm and then 7mm to print test sheets
+- tips: fixed the phrasing now that we have 3 types of activities
+- UI: coordinates only render every 5 cells now and are labeled on all axes
+- UI: added 2 additional padding cells to make it easier for students
+- UI: reduced the font size of the Color Codes
+- UI: reduced the padding of the grid
+- UX: changed the way the PDF gets named
+
 2024/10/27
 
 - algo: padding is now added to all color codes in Maze and Road Challenge

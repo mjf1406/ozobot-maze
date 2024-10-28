@@ -16,7 +16,7 @@ export const CALIBRATION_CIRCLE_DIAMETER = 39;
 export const CURVE_DIAMETER = 25;
 export const LINE_SIDE_WHITE_SPACE = 12;
 export const ZIGZAG_BACKWALK_COLOR_CODE_GAP = 64;
-export const GRID_CELL_SIZE = 5; // in millimeters
+export const GRID_CELL_SIZE = 6; // in millimeters
 
 export type Direction = 'top_to_bottom' | 'bottom_to_top' | 'left_to_right' | 'right_to_left';
 export const directions: Direction[] = ['top_to_bottom', 'bottom_to_top', 'left_to_right', 'right_to_left'];
@@ -30,7 +30,7 @@ function addPaddingToColorCode(colorCodeStart: PlacedColorCode): { path: Coordin
   const frontPadding: Coordinates[] = [];
   const endPadding: Coordinates[] = [];
 
-  const safety = [1, 2, 3, 4, 5]
+  const safety = [1, 2, 3, 4, 5, 6, 7]
   for (const offset of safety) {
       if (!startCoords || !startCoords1 ) continue
       switch (startDirection) {

@@ -19,19 +19,19 @@ const tips = [
     title: "Reading a Grid",
     desc: "Teach your students how to read the grid.",
     content:
-      "The Ozobot Challenge comes with a great opportunity to teach your students how to read a grid with coordinates. You could complete the Challenge together by calling out coordinates and a color.",
+      "The Ozobot Road Challenge and Ozobot City Challenge come with a great opportunity to teach your students how to read a grid with coordinates. You could complete the Challenges together by calling out coordinates and a color.",
   },
   {
     title: "Create an Ozobot Maze",
-    desc: "Repurpose Ozobot Challenge.",
+    desc: "Repurpose Ozobot City Challenge.",
     content:
-      "Instead of having the student complete the Ozobot Challenge, you could have them create an Ozobot Maze using the listed Color Codes and then pass it along to a classmate to try to gather all the stars.",
+      "Instead of having the student complete the Ozobot City Challenge, you could have them create an Ozobot Maze using the listed Color Codes and then pass it along to a classmate to try to solve.",
   },
   {
     title: "Scaffolding",
     desc: "It is recommended that you scaffold these activities for best results.",
     content:
-      "The scaffolded approach has students completing Ozobot Mazes before they complete Ozobot Road Challenges before they complete Ozobot City Challenges. This approach might not work for all students, so try giving Ozobot Road Challenges to those that struggle with the Ozobot Mazes, then they can move onto Ozobot Mazes when they're ready.",
+      "The scaffolded approach has students completing Ozobot Road Challenges before they complete Ozobot Mazes before they complete Ozobot City Challenges.",
   },
   {
     title: "",

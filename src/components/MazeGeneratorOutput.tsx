@@ -21,6 +21,8 @@ import type {
 } from "./MazeGeneratorForm";
 import { COLOR_CODES, getAbbreviation, COLORS } from "~/lib/generateOutput";
 import { useI18n } from "locales/client";
+import { GRID_CELL_SIZE } from "~/lib/generateMaze";
+import "~/lib/stringExtensions";
 
 export type RevealColorCodesOptions = "none" | "usable" | "used";
 
@@ -143,7 +145,12 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
         const pageHeight = pdf.internal.pageSize.getHeight();
 
         pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
-        pdf.save(`${data.title || "maze"}.pdf`);
+
+        const title = data.mazeType.replaceAll("_", " ");
+
+        pdf.save(
+          `${data.title ? data.title + " - " : ""}${title.toTitleCase()} (${data.difficulty}).pdf`,
+        );
       } catch (error) {
         console.error("Error generating PDF:", error);
         // Optionally, you can add error handling UI here
@@ -193,7 +200,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
     hints.push(
       <div
         key="color-codes"
-        className="text-4xs flex items-center justify-center gap-2"
+        className="text-5xs flex items-center justify-center gap-2"
       >
         {colorCodesToDisplay.map((command) => (
           <div
@@ -202,20 +209,20 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
           >
             <div className="flex flex-col flex-wrap items-center justify-center">
               <div>{command.name}</div>
-              <div className="mt-1">
+              <div className="">
                 {data.revealHints.quantities && (
                   <div className="flex items-center gap-0.5">
                     {Array.from({
                       length: maze.colorCodeQuantities[command.name] ?? 0,
                     }).map((_, i) => (
-                      <Square key={i} size={10} />
+                      <Square key={i} size={8} />
                     ))}
                   </div>
                 )}
               </div>
-              <div className="mt-1 flex">
+              <div className="mt-0.5 flex">
                 <div
-                  className="flex h-3 w-3 items-center justify-center text-xs font-medium"
+                  className="flex h-2 w-2 items-center justify-center text-xs font-medium"
                   style={{
                     backgroundColor: "#130c0e",
                   }}
@@ -223,7 +230,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                 {command.colors.map((color, index) => (
                   <div
                     key={`${command.name}-${color}-${index}`}
-                    className="abbreviation-div flex h-3 w-3 items-center justify-center text-center font-medium"
+                    className="abbreviation-div flex h-2 w-2 items-center justify-center text-center font-medium"
                     style={{
                       backgroundColor: color,
                       color: color === "#000000" ? "white" : "black",
@@ -235,7 +242,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
 
                 {command.name !== "U-Turn (line end)" && (
                   <div
-                    className="flex h-3 w-3 items-center justify-center font-medium"
+                    className="flex h-2 w-2 items-center justify-center font-medium"
                     style={{
                       backgroundColor: "#130c0e",
                     }}
@@ -251,138 +258,157 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
 
   const mazeGridElement = useMemo(() => {
     if (maze.grid && maze.grid.length > 0) {
+      const numRows = maze.grid.length;
+      const numCols = maze.grid[0]?.length ?? 0;
+
+      // Function to determine if a label should be shown (every 5 cells)
+      const shouldShowLabel = (index: number) => (index + 1) % 5 === 0;
+
+      // Generate column labels for top and bottom
+      const columnLabelsTop = Array.from({ length: numCols }).map((_, col) =>
+        shouldShowLabel(col) ? (
+          <div
+            key={`col-top-${col}`}
+            className="text-5xs h-full w-full text-left"
+          >
+            {col + 1}
+          </div>
+        ) : (
+          <div key={`col-top-${col}`} className="h-full w-full" />
+        ),
+      );
+
+      const columnLabelsBottom = Array.from({ length: numCols }).map(
+        (_, col) =>
+          shouldShowLabel(col) ? (
+            <div
+              key={`col-bottom-${col}`}
+              className="text-5xs h-full w-full text-left"
+            >
+              {col + 1}
+            </div>
+          ) : (
+            <div key={`col-bottom-${col}`} className="h-full w-full" />
+          ),
+      );
+
+      // Generate row labels for left and right
+      const rowLabelsLeft = Array.from({ length: numRows }).map((_, row) =>
+        shouldShowLabel(row) ? (
+          <div
+            key={`row-left-${row}`}
+            className="text-5xs flex h-full w-full items-center justify-center"
+          >
+            {row + 1}
+          </div>
+        ) : (
+          <div key={`row-left-${row}`} className="h-full w-full" />
+        ),
+      );
+
+      const rowLabelsRight = Array.from({ length: numRows }).map((_, row) =>
+        shouldShowLabel(row) ? (
+          <div
+            key={`row-right-${row}`}
+            className="text-5xs flex h-full w-full items-center justify-center"
+          >
+            {row + 1}
+          </div>
+        ) : (
+          <div key={`row-right-${row}`} className="h-full w-full" />
+        ),
+      );
+
       return (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${maze.grid[0]?.length ?? 0}, ${
-              5 * scale
-            }mm)`,
-            width: `${(maze.grid[0]?.length ?? 0) * 5 * scale}mm`,
-            height: `${maze.grid.length * 5 * scale}mm`,
-          }}
-        >
-          {maze.grid.flat().map((cell, index) => {
-            const numColumns = maze.grid[0]?.length ?? 0; // Number of columns in the grid
-            const numRows = maze.grid.length; // Number of rows in the grid
-            const row = Math.floor(index / numColumns); // Current row
-            const col = index % numColumns; // Current column
+        <div className="relative">
+          {/* Top Column Labels */}
+          <div
+            className="grid grid-cols-1 gap-0"
+            style={{
+              gridTemplateColumns: `repeat(${numCols}, ${GRID_CELL_SIZE * scale}mm)`,
+            }}
+          >
+            <div key={`col-bottom-x`} className="h-full w-full" />
+            {columnLabelsTop}
+          </div>
 
-            // Determine the key for each cell to ensure unique identification
-            const cellKey = `${row}-${col}`;
+          {/* Main Grid with Side Labels */}
+          <div className="flex">
+            {/* Left Row Labels */}
+            <div className="mr-0.5 flex flex-col gap-0">{rowLabelsLeft}</div>
 
-            // Conditional rendering based on mazeType
-            if (data.mazeType === "ozobot_city_challenge") {
-              return (
-                <div
-                  key={cellKey}
-                  style={{
-                    width: `${5 * scale}mm`,
-                    height: `${5 * scale}mm`,
-                    backgroundColor: cell.color ?? COLORS.white,
-                  }}
-                  className={`flex items-center justify-center border-b border-r opacity-50 ${
-                    row === 0 ? "border-t" : ""
-                  } ${col === 0 ? "border-l" : ""}`}
-                >
-                  {/* Render cell content specific to Ozobot City Challenge */}
+            {/* Maze Grid */}
+            <div
+              className="grid gap-0"
+              style={{
+                gridTemplateColumns: `repeat(${numCols}, ${GRID_CELL_SIZE * scale}mm)`,
+                width: `${numCols * GRID_CELL_SIZE * scale}mm`,
+                height: `${numRows * GRID_CELL_SIZE * scale}mm`,
+              }}
+            >
+              {maze.grid.flat().map((cell, index) => {
+                const row = Math.floor(index / numCols);
+                const col = index % numCols;
+                const cellKey = `${row}-${col}`;
+
+                // Determine if labels should be shown inside the cell
+                const showRowLabel = shouldShowLabel(row);
+                const showColLabel = shouldShowLabel(col);
+
+                // Cell styling based on mazeType and cell color
+                let cellClasses = "flex items-center justify-center";
+                if (!cell.color) cellClasses += " border-b border-r opacity-50";
+                if (row === 0) cellClasses += " border-t";
+                if (col === 0) cellClasses += " border-l";
+
+                return (
                   <div
-                    className={`text-7xs ${
-                      cell.color ? "text-white" : "text-black"
-                    }`}
+                    key={cellKey}
+                    className={cellClasses}
+                    style={{
+                      width: `${GRID_CELL_SIZE * scale}mm`,
+                      height: `${GRID_CELL_SIZE * scale}mm`,
+                      backgroundColor: cell.color ?? COLORS.white,
+                    }}
                   >
-                    {row}, {col}
-                  </div>
-                </div>
-              );
-            } else if (data.mazeType === "ozobot_road_challenge") {
-              return (
-                <div
-                  key={cellKey}
-                  style={{
-                    width: `${5 * scale}mm`,
-                    height: `${5 * scale}mm`,
-                    backgroundColor: cell.color ?? COLORS.white,
-                  }}
-                  className={`flex items-center justify-center border-b border-r ${
-                    row === 0 ? "border-t" : ""
-                  } ${col === 0 ? "border-l" : ""} ${
-                    !cell.color && "opacity-50"
-                  } ${cell.color && "border-none"}`}
-                >
-                  {/* Render cell content specific to Ozobot Road Challenge */}
-                  <div
-                    className={`text-7xs ${
-                      cell.color ? "text-white" : "text-black"
-                    }`}
-                  >
+                    {/* Conditionally render coordinates if the cell has no color */}
                     {!cell.color && (
-                      <div>
-                        {row}, {col}
+                      <div className="text-6xs flex items-center justify-center text-center text-black">
+                        {showRowLabel && showColLabel
+                          ? `${row + 1},${col + 1}`
+                          : null}
                       </div>
                     )}
                   </div>
-                </div>
-              );
-            } else if (data.mazeType === "ozobot_maze") {
-              return (
-                <div
-                  key={cellKey}
-                  style={{
-                    width: `${5 * scale}mm`,
-                    height: `${5 * scale}mm`,
-                    backgroundColor: cell.color ?? COLORS.white,
-                  }}
-                  className={`flex items-center justify-center ${
-                    cell.color === COLORS.white && "border"
-                  }`}
-                >
-                  {/* Render cell content specific to Ozobot Maze */}
-                  {/* You can customize this section as needed */}
-                  <div
-                    className={`text-7xs ${
-                      cell.color ? "text-white" : "text-black"
-                    }`}
-                  >
-                    {!cell.color && (
-                      <div>
-                        {row}, {col}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            } else {
-              // Fallback rendering if mazeType is none of the above
-              return (
-                <div
-                  key={cellKey}
-                  style={{
-                    width: `${5 * scale}mm`,
-                    height: `${5 * scale}mm`,
-                    backgroundColor: cell.color ?? COLORS.white,
-                  }}
-                  className={`flex items-center justify-center border-b border-r ${
-                    row === 0 ? "border-t" : ""
-                  } ${col === 0 ? "border-l" : ""}`}
-                >
-                  {/* Default cell content */}
-                  <span className="text-xs">{/* Optional Content */}</span>
-                </div>
-              );
-            }
-          })}
+                );
+              })}
+            </div>
+
+            {/* Right Row Labels */}
+            <div className="ml-0.5 flex flex-col gap-0">{rowLabelsRight}</div>
+          </div>
+
+          {/* Bottom Column Labels */}
+          <div
+            className="grid grid-cols-1 gap-0"
+            style={{
+              gridTemplateColumns: `repeat(${numCols}, ${GRID_CELL_SIZE * scale}mm)`,
+            }}
+          >
+            <div key={`col-bottom-x`} className="h-full w-full" />
+            {columnLabelsBottom}
+          </div>
         </div>
       );
     }
-    return null; // Return null if maze.grid is empty or undefined
+    return null;
   }, [maze.grid, data.mazeType, scale]);
 
   return (
     <>
       <Card
         ref={cardRef}
-        className="relative border-none bg-white"
+        className="relative border-none bg-white p-0"
         id="output"
         style={{
           width: scaledHeight,
@@ -391,10 +417,15 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
           aspectRatio: width && height ? `${width} / ${height}` : "auto",
         }}
       >
-        <CardContent className="p-3">
-          <div className="mb-4 flex items-start justify-between">
+        <CardContent className="p-2">
+          <div className="mb-2 flex items-start justify-between">
             <div>
-              <div className="text-sm font-semibold">
+              <div className="text-xs font-semibold">
+                {data.mazeType === "ozobot_city_challenge"
+                  ? "🏙️"
+                  : data.mazeType === "ozobot_road_challenge"
+                    ? "🛣️"
+                    : "🧩"}{" "}
                 {data.title} Ozobot{" "}
                 {data.mazeType === "ozobot_city_challenge"
                   ? "City Challenge"
@@ -407,7 +438,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                 {data.mazeType === "ozobot_city_challenge"
                   ? "Create a path for Ozobot in the city using all the Color Codes below! Plan your path in pencil first, then double and triple check it!"
                   : data.mazeType === "ozobot_road_challenge"
-                    ? "Navigate Ozobot through each Color Codes on the grid! Ensure your path is well-planned in pencil before coloring in the black lines."
+                    ? "Navigate Ozobot through each Color Code on the grid! Ensure your path is well-planned in pencil before coloring in the black lines."
                     : "Help Ozobot collect all the ⭐! Plan your Color Codes in pencil first, then double and triple check them!"}
               </div>
             </div>
@@ -431,7 +462,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
             <div
               className={`${
                 hasRevealedHints ? "col-span-4" : "col-span-5"
-              } rounded-lg p-4 font-mono`}
+              } rounded-lg font-mono`}
             >
               {/* <pre>{maze.mazeText}</pre> */}
               {mazeGridElement}
