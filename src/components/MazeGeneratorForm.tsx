@@ -11,7 +11,7 @@ import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { pixelifySans } from "~/app/fonts";
-import { AlertTriangle, Dices, X } from "lucide-react";
+import { AlertTriangle, Dices, Lightbulb, X } from "lucide-react";
 import NumberInput from "./ui/number-input";
 import type { PaperSize } from "~/lib/printingFunctions";
 import { useI18n } from "locales/client";
@@ -551,6 +551,23 @@ const MazeForm = () => {
           )}
         </Button>
       </form>
+      <div className="flex max-w-xl items-center justify-center gap-2 rounded-xl bg-secondary/50">
+        <div className="rounded-l-xl bg-secondary p-4">
+          <Lightbulb size={48} />
+        </div>
+        <div className="pr-4">
+          {t("app_instructions")}{" "}
+          <a
+            className="link"
+            href="https://docs.google.com/presentation/d/1gsEc00LPQvVW6OCdT7wDUpv36p9kIoo-fTDff-DeESU/edit#slide=id.g30f46b4f33f_0_0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t("app_here")}
+          </a>
+          .
+        </div>
+      </div>
       {/* Conditional Rendering */}
       {isLoading && <MazeLoading />}
       {isFormSubmitted && !isLoading && outputData && (

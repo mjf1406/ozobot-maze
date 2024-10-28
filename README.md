@@ -50,6 +50,7 @@
 ### p0
 
 - UX: added translations for Tips in ko and zhs
+- UX: work on adding instructions for each activity type as a teaching resource
 
 ## Change Log
 
