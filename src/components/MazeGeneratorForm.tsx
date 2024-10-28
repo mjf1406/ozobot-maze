@@ -566,6 +566,11 @@ const MazeForm = () => {
             {t("app_here")}
           </a>
           .
+          <p className="text-2xs">
+            It is recommended that you make your own copy, then copy the slide
+            that you need until there are 4 copies of that slide, and finally
+            print 4 per page, single-sided.
+          </p>
         </div>
       </div>
       {/* Conditional Rendering */}
