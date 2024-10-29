@@ -1,3 +1,4 @@
+import { sortCoordinatesArray } from "./generateMaze";
 import { COLORS, type Cell } from "./generateOutput";
 import type { PlacedColorCode } from "./placeColorCodes";
 
@@ -14,20 +15,9 @@ function calculateManhattanDistance(point1: Coordinates, point2: Coordinates): n
     return Math.abs(point1.x - point2.x) + Math.abs(point1.y - point2.y);
 }
 
-function sortCoordinatesArray(coordinates: Coordinates[]): Coordinates[] {
-    if (coordinates.length <= 1) return coordinates;
-    let coordToSortBy: 'x' | 'y' = 'x';  // Default to x
-    if ( coordinates[0] && coordinates[1] && coordinates[0].x !== coordinates[1].x ) {
-        coordToSortBy = 'x';
-    } else if ( coordinates[0] && coordinates[1] &&  coordinates[0].y !== coordinates[1].y ) {
-        coordToSortBy = 'y';
-    }
-    return [...coordinates].sort((a, b) => a[coordToSortBy] - b[coordToSortBy]);
-}
-
 function findManhattanPath(colorCodeStart: PlacedColorCode, colorCodeEnd: PlacedColorCode): Coordinates[] | undefined {
-    console.log("🚀 ~ findManhattanPath ~ colorCodeStart:", colorCodeStart)
-    console.log("🚀 ~ findManhattanPath ~ colorCodeEnd:", colorCodeEnd)
+    // console.log("🚀 ~ findManhattanPath ~ colorCodeStart:", colorCodeStart)
+    // console.log("🚀 ~ findManhattanPath ~ colorCodeEnd:", colorCodeEnd)
     /*
         - [ ] at least 25mm between any parallel tracks (5 cells)
         - [ ] At least 51mm between color codes (10 cells)
@@ -78,7 +68,7 @@ function findManhattanPath(colorCodeStart: PlacedColorCode, colorCodeEnd: Placed
           }
     }
 
-    console.log("🚀 ~ findManhattanPath ~ path:", path)
+    // console.log("🚀 ~ findManhattanPath ~ path:", path)
     return path;
 }
 
@@ -99,7 +89,7 @@ interface DistanceItem {
 }
 
 export function connectColorCodes(grid: Cell[][], placedColorCodes: PlacedColorCode[]): Cell[][] {
-    console.log("Starting connectColorCodes with", placedColorCodes.length, "color codes");
+    // console.log("Starting connectColorCodes with", placedColorCodes.length, "color codes");
     
     for (let index = 0; index < placedColorCodes.length - 1; index++) {
         const elementCurrent = placedColorCodes[index];
@@ -134,11 +124,11 @@ export function connectColorCodes(grid: Cell[][], placedColorCodes: PlacedColorC
         const endCoord = elementNext.coordinates[0];
         
         if (startCoord && endCoord) {
-            console.info(`Finding path between color codes ${index} and ${index + 1}`);
+            // console.info(`Finding path between color codes ${index} and ${index + 1}`);
             const path = findManhattanPath(elementCurrent, elementNext);
             
             if (path) {
-                console.log(`Found valid path with ${path.length} points`);
+                // console.log(`Found valid path with ${path.length} points`);
                 colorManhattanPath(grid, path);
             } else {
                 console.error(`No valid path found between color codes ${index} and ${index + 1}`);

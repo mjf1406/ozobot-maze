@@ -51,6 +51,7 @@
 
 - UX: added translations for Tips in ko and zhs
 - UX: work on adding instructions for each activity type as a teaching resource
+- PDF: need to ensure the Usable Hints only show the color codes that actually get placed on the grid
 - UI: add custom difficulty
   - [ ] add quantity next to each Color Code that is selected
   - [ ] remove the total as they set the quantity for each Color Code
@@ -59,6 +60,7 @@
 
 2024/10/29
 
+- algo: color code padding is now integrated into placeColorCodes. This makes it better for staying within Ozobot constraints.
 - fixed: printed output now does not cut off row labels in A3 page size
 - fixed: adjusted alignment of row and column labels, cell coordinates, and padding on A3 to fix formatting issues when printing
 
