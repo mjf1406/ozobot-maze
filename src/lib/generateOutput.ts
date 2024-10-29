@@ -123,7 +123,7 @@ export const DIFFICULTIES = {
 // GRID_CELL_SIZE = 6
 export const MODIFIERS = {
     A4: { height: 0.82, width: 1.0 },
-    A3: { height: 0.88, width: 1.02 },
+    A3: { height: 0.88, width: 0.99 },
     Letter: { height: 0.87, width: 1.05 },
     Legal: { height: 0.88, width: 1.05 },
 };

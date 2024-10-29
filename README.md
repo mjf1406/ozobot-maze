@@ -57,6 +57,11 @@
 
 ## Change Log
 
+2024/10/29
+
+- fixed: printed output now does not cut off row labels in A3 page size
+- fixed: adjusted alignment of row and column labels, cell coordinates, and padding on A3 to fix formatting issues when printing
+
 2024/10/28
 
 - algo: adjusted difficulty to be better organized and pulled from data, removing the switch from the getRandomQuantity function

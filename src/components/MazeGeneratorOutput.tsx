@@ -114,6 +114,62 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
           div.classList.add("mt-1");
         });
 
+        const checkboxDivs = cardRef.current.querySelectorAll(".checkboxes");
+        checkboxDivs.forEach((div) => {
+          div.classList.add("mt-1");
+        });
+
+        const coordinatesDivs =
+          cardRef.current.querySelectorAll(".coordinates");
+        coordinatesDivs.forEach((div) => {
+          div.classList.add(
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-full",
+            "-mt-2",
+          );
+        });
+
+        const coordinateDivs =
+          cardRef.current.querySelectorAll(".coordinate-label");
+        coordinateDivs.forEach((div) => {
+          div.classList.add(
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-full",
+            "-mt-2",
+          );
+        });
+
+        const coordinateDivsTop = cardRef.current.querySelectorAll(
+          ".coordinate-label-top",
+        );
+        coordinateDivsTop.forEach((div) => {
+          div.classList.add(
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-full",
+            "-mt-1",
+            "-ml-1",
+          );
+        });
+
+        const coordinateDivsBottom = cardRef.current.querySelectorAll(
+          ".coordinate-label-bottom",
+        );
+        coordinateDivsBottom.forEach((div) => {
+          div.classList.add(
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-full",
+            "-ml-1",
+          );
+        });
+
         // Wait for the DOM to update
         await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -127,6 +183,51 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
         });
         iconDivs.forEach((div) => {
           div.classList.remove("mt-1");
+        });
+
+        checkboxDivs.forEach((div) => {
+          div.classList.remove("mt-1");
+        });
+
+        coordinatesDivs.forEach((div) => {
+          div.classList.remove(
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-full",
+            "-mt-2",
+          );
+        });
+
+        coordinateDivs.forEach((div) => {
+          div.classList.remove(
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-full",
+            "-mt-2",
+          );
+        });
+
+        coordinateDivsTop.forEach((div) => {
+          div.classList.remove(
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-full",
+            "-mt-1",
+            "-ml-1",
+          );
+        });
+
+        coordinateDivsBottom.forEach((div) => {
+          div.classList.remove(
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-full",
+            "-ml-1",
+          );
         });
 
         const scaling = createScalingObject(data.pageSize, DPI.PRINT_MEDIUM);
@@ -211,7 +312,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
               <div>{command.name}</div>
               <div className="">
                 {data.revealHints.quantities && (
-                  <div className="flex items-center gap-0.5">
+                  <div className="checkboxes flex items-center gap-0.5">
                     {Array.from({
                       length: maze.colorCodeQuantities[command.name] ?? 0,
                     }).map((_, i) => (
@@ -269,12 +370,15 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
         shouldShowLabel(col) ? (
           <div
             key={`col-top-${col}`}
-            className="text-5xs h-full w-full text-left"
+            className="text-5xs coordinate-label-top h-full w-full text-left"
           >
             {col + 1}
           </div>
         ) : (
-          <div key={`col-top-${col}`} className="h-full w-full" />
+          <div
+            key={`col-top-${col}`}
+            className="coordinate-label-top h-full w-full"
+          />
         ),
       );
 
@@ -283,12 +387,15 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
           shouldShowLabel(col) ? (
             <div
               key={`col-bottom-${col}`}
-              className="text-5xs h-full w-full text-left"
+              className="text-5xs coordinate-label-bottom h-full w-full text-left"
             >
               {col + 1}
             </div>
           ) : (
-            <div key={`col-bottom-${col}`} className="h-full w-full" />
+            <div
+              key={`col-bottom-${col}`}
+              className="coordinate-label-bottom h-full w-full"
+            />
           ),
       );
 
@@ -297,12 +404,15 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
         shouldShowLabel(row) ? (
           <div
             key={`row-left-${row}`}
-            className="text-5xs flex h-full w-full items-center justify-center"
+            className="text-5xs coordinate-label flex h-full w-full items-center justify-center"
           >
             {row + 1}
           </div>
         ) : (
-          <div key={`row-left-${row}`} className="h-full w-full" />
+          <div
+            key={`row-left-${row}`}
+            className="coordinate-label h-full w-full"
+          />
         ),
       );
 
@@ -310,12 +420,15 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
         shouldShowLabel(row) ? (
           <div
             key={`row-right-${row}`}
-            className="text-5xs flex h-full w-full items-center justify-center"
+            className="text-5xs coordinate-label flex h-full w-full items-center justify-center"
           >
             {row + 1}
           </div>
         ) : (
-          <div key={`row-right-${row}`} className="h-full w-full" />
+          <div
+            key={`row-right-${row}`}
+            className="coordinate-label h-full w-full"
+          />
         ),
       );
 
@@ -373,7 +486,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                   >
                     {/* Conditionally render coordinates if the cell has no color */}
                     {!cell.color && (
-                      <div className="text-6xs flex items-center justify-center text-center text-black">
+                      <div className="text-6xs coordinates flex items-center justify-center text-center text-black">
                         {showRowLabel && showColLabel
                           ? `${row + 1},${col + 1}`
                           : null}
@@ -408,7 +521,9 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
     <>
       <Card
         ref={cardRef}
-        className="relative border-none bg-white p-0"
+        className={`${
+          hasRevealedHints ? "col-span-4" : "col-span-5"
+        } ${data.pageSize === "A3" ? "p-2" : "p-0"} relative border-none bg-white`}
         id="output"
         style={{
           width: scaledHeight,
