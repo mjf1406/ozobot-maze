@@ -6,9 +6,9 @@ import { COLORS, type Cell, type ColorCode } from "./generateOutput";
 // Units in millimeters
 export const COLOR_CODE_GAP = 51;
 export const LINE_SIDE_WHITE_SPACE = 12;
-export const PERPENDICULAR_PADDING_CELLS = 7
 
-// New constant for minimum distance from the edge in grid cells
+// Units in grid cells
+export const PERPENDICULAR_PADDING_CELLS = 7
 export const MIN_EDGE_DISTANCE = 5;
 
 // Define the structure to save placed color code coordinates
