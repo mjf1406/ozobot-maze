@@ -36,8 +36,8 @@ export const generateMaze = async (
   usedColorCodes: ColorCode[],
   grid: Cell[][],
   data: Omit<MazeData, "maze">
-): Promise<{ grid: Cell[][]; placedColorCodes: PlacedColorCode[] }> => {
-  const { grid: updatedGrid, placedColorCodes } = placeColorCodes(usedColorCodes, grid);
+): Promise<{ grid: Cell[][]; placedColorCodes: PlacedColorCode[], failedToPlaceColorCodes: string[] }> => {
+  const { grid: updatedGrid, placedColorCodes, failedToPlaceColorCodes } = placeColorCodes(usedColorCodes, grid);
 
   if (data.mazeType === "ozobot_maze") {
     // TODO: Implement connection logic between color codes with black lines within constraints
@@ -56,5 +56,5 @@ export const generateMaze = async (
 
   }
 
-  return { grid: updatedGrid, placedColorCodes };
+  return { grid: updatedGrid, placedColorCodes, failedToPlaceColorCodes };
 };

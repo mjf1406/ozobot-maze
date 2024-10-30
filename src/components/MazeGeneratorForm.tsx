@@ -21,6 +21,7 @@ import {
   generateOutput,
   getAbbreviation,
 } from "~/lib/generateOutput";
+import type { PlacedColorCode } from "~/lib/placeColorCodes";
 
 export type TranslationKey =
   | "form_title"
@@ -34,15 +35,15 @@ export type TranslationKey =
   | "form_page_size_alert"
   | "form_page_size_desc"
   | "form_difficulty"
-  | "difficulty_very_easy"
+  | "difficulty_easy_low"
   | "difficulty_easy"
   | "difficulty_easy_medium"
   | "difficulty_medium"
   | "difficulty_medium_hard"
   | "difficulty_hard"
-  | "difficulty_very_hard"
-  | "difficulty_super_hard"
-  | "difficulty_extreme"
+  | "difficulty_hard_high"
+  | "difficulty_hard_super"
+  | "difficulty_hard_extreme"
   | "difficulty_custom"
   | "form_difficulty_alert"
   | "form_difficulty_desc"
@@ -96,21 +97,26 @@ export type Maze = {
   colorCodeQuantities: Record<string, number>;
   usedColorCodes?: typeof COLOR_CODES;
   grid: Cell[][];
+  maze: {
+    grid: Cell[][];
+    placedColorCodes: PlacedColorCode[];
+    failedToPlaceColorCodes: string[];
+  };
 };
 
 const difficultyOptions: Array<{
   value: DifficultyOptions;
   labelKey: TranslationKey;
 }> = [
-  { value: "easy-low", labelKey: "difficulty_very_easy" },
+  { value: "easy-low", labelKey: "difficulty_easy_low" },
   { value: "easy", labelKey: "difficulty_easy" },
   { value: "easy-medium", labelKey: "difficulty_easy_medium" },
   { value: "medium", labelKey: "difficulty_medium" },
   { value: "medium-hard", labelKey: "difficulty_medium_hard" },
   { value: "hard", labelKey: "difficulty_hard" },
-  { value: "hard-high", labelKey: "difficulty_very_hard" },
-  { value: "hard-super", labelKey: "difficulty_super_hard" },
-  { value: "hard-extreme", labelKey: "difficulty_extreme" },
+  { value: "hard-high", labelKey: "difficulty_hard_high" },
+  { value: "hard-super", labelKey: "difficulty_hard_super" },
+  { value: "hard-extreme", labelKey: "difficulty_hard_extreme" },
   // { value: "custom", labelKey: "difficulty_custom" }, // TODO: Implement this
 ];
 

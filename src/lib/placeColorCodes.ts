@@ -27,7 +27,7 @@ export type AbsolutePosition = {
 export const placeColorCodes = (
   usedColorCodes: ColorCode[],
   grid: Cell[][]
-): { grid: Cell[][]; placedColorCodes: PlacedColorCode[] } => {
+): { grid: Cell[][]; placedColorCodes: PlacedColorCode[], failedToPlaceColorCodes: string[] } => {
   // Helper constants in terms of grid cells
   const MIN_DISTANCE_BETWEEN_COLOR_CODES = Math.ceil(COLOR_CODE_GAP / GRID_CELL_SIZE); // 11 cells
   const MIN_WHITE_SPACE = Math.ceil(LINE_SIDE_WHITE_SPACE / GRID_CELL_SIZE); // 3 cells
@@ -98,6 +98,8 @@ export const placeColorCodes = (
     }
     return positions;
   };
+
+  const failedToPlaceColorCodes: string[] = []
 
   // Iterate through each ColorCode
   for (const colorCode of usedColorCodes) {
@@ -174,11 +176,12 @@ export const placeColorCodes = (
         console.warn(
           `Could not place color code: ${colorCode.name} (Instance ${q + 1}/${quantity}) after ${MAX_PLACEMENT_ATTEMPTS} attempts`
         );
+        failedToPlaceColorCodes.push(colorCode.name)
       }
     }
   }
 
-  return { grid, placedColorCodes };
+  return { grid, placedColorCodes, failedToPlaceColorCodes };
 };
 
 function addPaddingToColorCode(absolutePositions: AbsolutePosition[], direction: Direction): AbsolutePosition[] {

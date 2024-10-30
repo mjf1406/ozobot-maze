@@ -224,7 +224,7 @@ export const generateOutput = async (data: Omit<MazeData, "maze">): Promise<Maze
     usedColorCodes.forEach(code => {
         colorCodeQuantities[code.name] = code.quantity ?? 0;
     });
-    
+
     return {
         mazeText,
         usedColorCodes,

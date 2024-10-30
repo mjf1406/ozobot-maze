@@ -18,6 +18,7 @@ import type {
   DifficultyOptions,
   Maze,
   MazeTypeOptions,
+  TranslationKey,
 } from "./MazeGeneratorForm";
 import { COLOR_CODES, getAbbreviation, COLORS } from "~/lib/generateOutput";
 import { useI18n } from "locales/client";
@@ -96,6 +97,8 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const t = useI18n();
+
+  const difficultyKey = `difficulty_${data.difficulty.replaceAll("-", "_")}`;
 
   const handleDownloadPDF = async () => {
     if (cardRef.current) {
@@ -270,32 +273,48 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
     .split("×")
     .map((dim) => parseInt(dim.trim()));
 
-  // Scale down the dimensions for screen display (e.g., 1/2 scale)
   const scale = 0.5;
   const scaledWidth = width ? `${Math.round(width * scale)}px` : "auto";
   const scaledHeight = height ? `${Math.round(height * scale)}px` : "auto";
 
-  // Determine if any hints are revealed
   const hasRevealedHints =
     data.revealHints.revealColorCodes !== "none" || data.revealHints.quantities;
 
-  // Generate hints based on revealHints
   const hints = [];
 
-  // Generate the list of color codes based on the selection
+  const aggregatedPlacedColorCodes = useMemo(() => {
+    if (data?.revealHints?.revealColorCodes !== "used") {
+      return [];
+    }
+
+    const map: Record<string, number> = {};
+
+    maze?.maze?.placedColorCodes?.forEach((code) => {
+      if (code?.name) {
+        map[code.name] = (map[code.name] ?? 0) + 1;
+      }
+    });
+
+    return Object.entries(map).map(([name, quantity]) => ({
+      name,
+      quantity,
+      colors: COLOR_CODES.find((code) => code.name === name)?.colors ?? [],
+    }));
+  }, [data?.revealHints?.revealColorCodes, maze?.maze?.placedColorCodes]);
+
   if (data.revealHints.revealColorCodes !== "none") {
-    let colorCodesToDisplay: typeof COLOR_CODES = COLOR_CODES.filter((code) =>
+    let colorCodesToDisplay:
+      | typeof COLOR_CODES
+      | typeof aggregatedPlacedColorCodes = COLOR_CODES.filter((code) =>
       code.difficulties.includes(data.difficulty),
     );
 
     if (data.revealHints.revealColorCodes === "usable") {
-      // Display all possible color codes
       colorCodesToDisplay = COLOR_CODES.filter((code) =>
-        code.difficulties.includes(data.difficulty),
+        code.difficulties.includes(data.difficulty.split("-")[0] ?? ""),
       );
     } else if (data.revealHints.revealColorCodes === "used") {
-      // Display only the color codes used in the maze
-      colorCodesToDisplay = maze.usedColorCodes ?? [];
+      colorCodesToDisplay = aggregatedPlacedColorCodes ?? [];
     }
 
     hints.push(
@@ -310,17 +329,18 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
           >
             <div className="flex flex-col flex-wrap items-center justify-center">
               <div>{command.name}</div>
-              <div className="">
-                {data.revealHints.quantities && (
-                  <div className="checkboxes flex items-center gap-0.5">
-                    {Array.from({
-                      length: maze.colorCodeQuantities[command.name] ?? 0,
-                    }).map((_, i) => (
-                      <Square key={i} size={8} />
-                    ))}
-                  </div>
-                )}
+              <div className="checkboxes flex items-center gap-0.5">
+                {data.revealHints.revealColorCodes &&
+                  Array.from({
+                    length: command.quantity ?? 0,
+                  }).map(
+                    (_, i) =>
+                      data.revealHints.quantities && (
+                        <Square key={i} size={8} />
+                      ),
+                  )}
               </div>
+
               <div className="mt-0.5 flex">
                 <div
                   className="flex h-2 w-2 items-center justify-center text-xs font-medium"
@@ -547,7 +567,9 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
                   : data.mazeType === "ozobot_road_challenge"
                     ? "Road Challenge"
                     : "Maze"}{" "}
-                <span className="text-2xs">({data.difficulty})</span>
+                <span className="text-2xs">
+                  ({t(difficultyKey as TranslationKey)})
+                </span>
               </div>
               <div className="text-4xs text-muted-foreground">
                 {data.mazeType === "ozobot_city_challenge"
@@ -591,6 +613,27 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
           </CardFooter>
         </CardContent>
       </Card>
+      {maze.maze.failedToPlaceColorCodes.length > 0 && (
+        <div>
+          <div className="mb-2 text-center text-lg">
+            Failed to Place {maze.maze.failedToPlaceColorCodes.length} Color
+            Codes
+          </div>
+          <div className="flex w-full items-center justify-center">
+            <div className="mb-2 max-w-md text-center text-xs">
+              If you want to ensure all or more of the Color Codes get placed,
+              try selecting a lower difficulty or a larger page size.
+            </div>
+          </div>
+          <div className="text-2xs grid grid-cols-5 items-center justify-center gap-2">
+            {maze.maze.failedToPlaceColorCodes.map((code) => (
+              <div className="bg-secondary/50 p-1 text-center" key={code}>
+                {code}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <Button
         className={`${pixelifySans.className} flex items-center justify-center text-2xl`}
         type="button" // Changed to "button" to prevent form submission

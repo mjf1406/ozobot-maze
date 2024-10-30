@@ -51,12 +51,18 @@
 
 - UX: added translations for Tips in ko and zhs
 - UX: work on adding instructions for each activity type as a teaching resource
-- PDF: need to ensure the Usable Hints only show the color codes that actually get placed on the grid
 - UI: add custom difficulty
   - [ ] add quantity next to each Color Code that is selected
   - [ ] remove the total as they set the quantity for each Color Code
 
 ## Change Log
+
+2024/10/30
+
+- UX: updated the difficulty names to be more fun
+- UX: the user is now alerted if any Color Codes were failed to be placed
+- PDF: Usable Hints now only shows the color codes that actually get placed on the grid along with the correct quantity
+- removed the locale switcher for now
 
 2024/10/29
 
