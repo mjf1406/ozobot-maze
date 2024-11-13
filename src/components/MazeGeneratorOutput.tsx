@@ -613,7 +613,7 @@ const MazeGeneratorOutput = React.memo(({ data }: { data: MazeData }) => {
           </CardFooter>
         </CardContent>
       </Card>
-      {maze.maze.failedToPlaceColorCodes.length > 0 && (
+      {maze.maze?.failedToPlaceColorCodes?.length > 0 && (
         <div>
           <div className="mb-2 text-center text-lg">
             Failed to Place {maze.maze.failedToPlaceColorCodes.length} Color

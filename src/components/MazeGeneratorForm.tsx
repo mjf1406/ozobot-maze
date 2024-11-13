@@ -154,7 +154,9 @@ const MazeForm = () => {
     revealColorCodes: "none",
     quantities: false,
   });
-  const [mazeType, setMazeType] = useState<MazeTypeOptions>("ozobot_maze"); // Updated default state
+  const [mazeType, setMazeType] = useState<MazeTypeOptions>(
+    "ozobot_road_challenge",
+  ); // Updated default state
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -222,10 +224,7 @@ const MazeForm = () => {
 
   // Updated effect to handle new maze types
   useEffect(() => {
-    if (
-      mazeType === "ozobot_city_challenge" ||
-      mazeType === "ozobot_road_challenge"
-    ) {
+    if (mazeType === "ozobot_road_challenge") {
       setRevealHints({
         revealColorCodes: "used",
         quantities: true,
@@ -234,6 +233,11 @@ const MazeForm = () => {
       setRevealHints({
         revealColorCodes: "none",
         quantities: false,
+      });
+    } else if (mazeType === "ozobot_city_challenge") {
+      setRevealHints({
+        revealColorCodes: "usable",
+        quantities: true,
       });
     }
   }, [mazeType]);
@@ -491,7 +495,11 @@ const MazeForm = () => {
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="used" id="reveal-color-codes-used" />
+                  <RadioGroupItem
+                    disabled={mazeType === "ozobot_city_challenge"}
+                    value="used"
+                    id="reveal-color-codes-used"
+                  />
                   <Label htmlFor="reveal-color-codes-used">
                     {t("form_used_color_codes")}
                   </Label>

@@ -57,6 +57,10 @@
 
 ## Change Log
 
+2024/11/13
+
+- UX: changed which hint option is default selected when changing the maze type
+
 2024/10/30
 
 - UX: updated the difficulty names to be more fun
