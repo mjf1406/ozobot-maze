@@ -57,7 +57,10 @@
 
 ## Change Log
 
-2024/11/13
+2024/12/29
+
+- algo: fine-tuned constraints to ensure the minimum distance between parallel codes is 5 empty cells
+- 2024/11/13
 
 - UX: changed which hint option is default selected when changing the maze type
 

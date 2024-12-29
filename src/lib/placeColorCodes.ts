@@ -1,11 +1,7 @@
 // lib/placeColorCodes.ts
 
-import { type Direction, directions, GRID_CELL_SIZE } from "./generateMaze";
+import { COLOR_CODE_GAP, type Direction, directions, GRID_CELL_SIZE, LINE_SIDE_WHITE_SPACE } from "./generateMaze";
 import { COLORS, type Cell, type ColorCode } from "./generateOutput";
-
-// Units in millimeters
-export const COLOR_CODE_GAP = 51;
-export const LINE_SIDE_WHITE_SPACE = 12;
 
 // Units in grid cells
 export const PERPENDICULAR_PADDING_CELLS = 7

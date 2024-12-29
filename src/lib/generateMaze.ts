@@ -9,7 +9,7 @@ import { connectColorCodes, type Coordinates } from "./connectColorCodes";
 export const LINE_THICKNESS = 5;
 export const PARALLEL_LINES_GAP = 25;
 export const COLOR_CODE_WIDTH = 5;
-export const COLOR_CODE_GAP = 51;
+export const COLOR_CODE_GAP = 36;
 export const CORNER_INTERSECTION_GAP = 25;
 export const SAFE_AREA_DIAMETER = 20;
 export const CALIBRATION_CIRCLE_DIAMETER = 39;
