@@ -60,6 +60,7 @@
 2024/12/29
 
 - algo: fine-tuned constraints to ensure the minimum distance between parallel codes is 5 empty cells
+- algo: made it so that it retries placing color codes over and over to try to get a grid that has no failed placements
 - UI: added popover explaining which Color Codes are included in which difficulties
 
 2024/11/13
