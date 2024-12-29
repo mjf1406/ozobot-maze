@@ -248,11 +248,7 @@ export const placeColorCodes = (
       }
 
       if (!placed) {
-        console.warn(
-          `Could not place color code: ${colorCode.name} (Instance ${
-            q + 1
-          }/${quantity}) after ${MAX_PLACEMENT_ATTEMPTS} attempts`
-        );
+        // console.warn( `Could not place color code: ${colorCode.name} (Instance ${ q + 1 }/${quantity}) after ${MAX_PLACEMENT_ATTEMPTS} attempts` );
         failedToPlaceColorCodes.push(colorCode.name);
       }
     }

@@ -116,7 +116,7 @@ export function connectColorCodes(grid: Cell[][], placedColorCodes: PlacedColorC
         const elementNext = manhattanDistances[0]?.element
 
         if (!elementCurrent?.coordinates || !elementNext?.coordinates) {
-            console.warn("Missing coordinates for elements at index", index);
+            // console.warn("Missing coordinates for elements at index", index);
             continue;
         }
         
