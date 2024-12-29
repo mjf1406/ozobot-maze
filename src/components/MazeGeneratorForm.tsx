@@ -184,8 +184,8 @@ const MazeForm = () => {
   } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    setIsLoading(true);
     e.preventDefault();
+    setIsLoading(true);
     setIsFormSubmitted(false);
 
     const mazeData = {
@@ -198,18 +198,25 @@ const MazeForm = () => {
       mazeType,
     };
 
-    const maze = await generateOutput(mazeData);
-    console.log("🚀 ~ handleSubmit ~ maze:", maze);
+    // Allow React to update the UI before starting the maze generation
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
-    setTimeout(() => {
+    try {
+      const maze = await generateOutput(mazeData);
+      console.log("🚀 ~ handleSubmit ~ maze:", maze);
+
       setOutputData({
         ...mazeData,
         maze,
       });
 
-      setIsLoading(false);
       setIsFormSubmitted(true);
-    }, 0);
+    } catch (error) {
+      console.error("Error generating maze:", error);
+      // Optionally, handle the error in the UI
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Scroll to output when form is submitted
