@@ -11,17 +11,28 @@ import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { pixelifySans } from "~/app/fonts";
-import { AlertTriangle, Dices, Lightbulb, X } from "lucide-react";
+import {
+  AlertTriangle,
+  Dices,
+  HelpCircleIcon,
+  Lightbulb,
+  X,
+} from "lucide-react";
 import NumberInput from "./ui/number-input";
 import type { PaperSize } from "~/lib/printingFunctions";
 import { useI18n } from "locales/client";
 import {
-  COLOR_CODES,
   type Cell,
+  COLOR_CODES,
   generateOutput,
   getAbbreviation,
 } from "~/lib/generateOutput";
 import type { PlacedColorCode } from "~/lib/placeColorCodes";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 
 export type TranslationKey =
   | "form_title"
@@ -341,8 +352,34 @@ const MazeForm = () => {
 
         {/* Difficulty RadioGroup */}
         <div>
-          <label className="block text-sm font-medium">
+          <label className="flex items-center justify-start gap-1 text-sm font-medium">
             {t("form_difficulty")}
+            <Popover>
+              <PopoverTrigger>
+                <HelpCircleIcon size={16} />
+              </PopoverTrigger>
+              <PopoverContent className="w-80 text-xs">
+                The below difficulties include all the Color Codes specific to
+                them and all Color Codes for any easier difficulties. <br />
+                <br />
+                <b>Novice, Apprentice, & Adept (3)</b> <br />
+                - Left at Intersection <br />
+                - Straight at Intersection <br />
+                - Right at Intersection <br />
+                <br />
+                <b>Skilled, Veteran, & Expert (6)</b>
+                <br />
+                - Line Switch Left
+                <br />
+                - Line Switch Straight <br />
+                - Line Switch Right <br />
+                <br />
+                <b>Master, Grandmaster, & Legendary (8)</b>
+                <br />
+                - U-Turn
+                <br />- U-Turn (line end)
+              </PopoverContent>
+            </Popover>
           </label>
           <RadioGroup
             value={difficulty}

@@ -60,7 +60,9 @@
 2024/12/29
 
 - algo: fine-tuned constraints to ensure the minimum distance between parallel codes is 5 empty cells
-- 2024/11/13
+- UI: added popover explaining which Color Codes are included in which difficulties
+
+2024/11/13
 
 - UX: changed which hint option is default selected when changing the maze type
 
