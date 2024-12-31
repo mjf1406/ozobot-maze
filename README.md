@@ -48,6 +48,7 @@
 
 ### p0
 
+- Move this project to [NextJS15](https://github.com/mjf1406/ozobot-activities)
 - UI: add custom difficulty
   - [ ] add quantity next to each Color Code that is selected
   - [ ] remove the total as they set the quantity for each Color Code
