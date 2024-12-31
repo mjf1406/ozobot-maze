@@ -5,52 +5,49 @@
 ### p3
 
 - UI: completed the FAQ and added translations
+- UX: added translations for Tips in ko and zhs
+- UX: work on adding instructions for each activity type as a teaching resource
 
 ### p2
 
-- Generation
-  - Eller's algo
-  - Recursive Backtracking
-  - Prim's algo
-  - Kruskal's algo
-- Inputs
-  - Number of commands required to finish the maze
-    - Minimum: ???
-    - Maximum: ???
-  - Difficulty
-    - proxy for how long the black line is that bit follows
-    - determines which command codes are required to finish the maze
-  - Generate two? (Front and back of page)
-  - Generate larger mazes? (tape multiple pages together)
-  - Grid type
-    - square
-    - circle
-    - hex
-- Output
-  - How wide is the Bit black line?
-  - Option to reveal the required commands with or without the quantities
-- algo: Ozobot constraints implemented for the maze to be solvable
-  - [ ] Zigzag and Backwalk require at least 64mm after to pick up another color code
-  - [ ] Line Switch Left/Right require a parallel line next to tit
-  - [ ] Line Switch Straight requires a perpendicular line
-  - [ ] color codes are 5mm x 5mm
-  - [ ] curves must have a minimum diameter of 25mm
-  - [ ] add a calibration circle to each maze: 39mm diameter
+- UI: Generate larger activities? (tape multiple pages together)
+- UI: Generate two? (Front and back of page)
+- UI: Difficulty
+  - Determines the command codes that can be used
+  - Determines the overall length of the line
+- FEATURE: Maze --
+  - Generation
+    - Eller's algo
+    - Recursive Backtracking
+    - Prim's algo
+    - Kruskal's algo
 
 ### p1
 
-- algo: Ozobot constraints implemented just to connect every command
-  - [ ] at least 25mm between any parallel tracks
-  - [ ] At least 51mm between color codes
-  - [ ] there must be at least 25mm from a corner/intersection before another corner/intersection/color code
-  - [ ] line that end in a color must have a safe area with a diameter of 20mm starting from the end of the line
-  - [ ] each side of a line must have at least 12mm of white space
-  - [ ] corner minimum angel is 90deg
+- FEATURE: Road Challenge Answer Keys
+  - algo: requires a solver algorithm that spits out many possible solutions
+  - UI: User can print several different answer keys
+- FEATURE: Maze -- A maze can be generated that uses the any combination of the below Color Codes
+  1. [ ] Straight at Intersection
+  2. [ ] Left at Intersection
+  3. [ ] Right at Intersection
+  - To do this we will need to...
+    1. randomly determine the start coordinates
+    2. randomly walk arouhnd the grid wqhile ranodmly determining if a color code is placed
+    3. continue doing the above
+    4. backtrack to add false paths
+    5. add false color codes to false paths
+    6. abide by all restrictions for these color codes
+    - [ ] at least 25mm between any parallel tracks
+    - [ ] At least 51mm between color codes
+    - [ ] there must be at least 25mm from a corner/intersection before another corner/intersection/color code
+    - [ ] line that end in a color must have a safe area with a diameter of 20mm starting from the end of the line
+    - [ ] each side of a line must have at least 12mm of white space
+    - [ ] corner minimum angle is 90deg
+    - [ ] add a calibration circle to each maze: 39mm diameter
 
 ### p0
 
-- UX: added translations for Tips in ko and zhs
-- UX: work on adding instructions for each activity type as a teaching resource
 - UI: add custom difficulty
   - [ ] add quantity next to each Color Code that is selected
   - [ ] remove the total as they set the quantity for each Color Code
@@ -128,6 +125,23 @@
 2024/10/23
 
 - did a whole bunch of stuff because it's the initial commit
+
+## Constraints
+
+- algo: Ozobot constraints implemented just to connect every command
+  - [ ] at least 25mm between any parallel tracks
+  - [ ] At least 51mm between color codes
+  - [ ] there must be at least 25mm from a corner/intersection before another corner/intersection/color code
+  - [ ] line that end in a color must have a safe area with a diameter of 20mm starting from the end of the line
+  - [ ] each side of a line must have at least 12mm of white space
+  - [ ] corner minimum angel is 90deg
+- algo: Ozobot constraints implemented for the maze to be solvable
+  - [ ] Zigzag and Backwalk require at least 64mm after to pick up another color code
+  - [ ] Line Switch Left/Right require a parallel line next to tit
+  - [ ] Line Switch Straight requires a perpendicular line
+  - [ ] color codes are 5mm x 5mm
+  - [ ] curves must have a minimum diameter of 25mm
+  - [ ] add a calibration circle to each maze: 39mm diameter
 
 ## Dependencies
 
