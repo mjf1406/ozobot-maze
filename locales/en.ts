@@ -26,7 +26,7 @@ export default {
   "form_page_size_Letter": "Letter",
   "form_page_size_Legal": "Legal",
   "form_page_size_alert": "Page size has changed. Please regenerate the maze.",
-  "form_page_size_desc": "As the page size increases, the difficulty decreases as Color Codes are generally farther apart.",
+  "form_page_size_desc": "As the page size increases, the difficulty decreases as Color Codes are generally farther apart. For this reason, A3/Legal is the recommended page size.",
   "form_difficulty": "Difficulty",
   "difficulty_easy_low": "Novice",
   "difficulty_easy": "Apprentice",

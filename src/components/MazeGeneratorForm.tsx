@@ -159,7 +159,7 @@ type RevealHintsOptions = {
 const MazeForm = () => {
   const t = useI18n();
   const [title, setTitle] = useState("");
-  const [pageSize, setPageSize] = useState<PaperSize>("A4");
+  const [pageSize, setPageSize] = useState<PaperSize>("A3");
   const [difficulty, setDifficulty] = useState<DifficultyOptions>("easy");
   const [customCommands, setCustomCommands] = useState<string[]>([]);
   const [totalCommands, setTotalCommands] = useState(0);
