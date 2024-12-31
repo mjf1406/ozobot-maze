@@ -122,12 +122,14 @@ const difficultyOptions: Array<{
   { value: "easy-low", labelKey: "difficulty_easy_low" },
   { value: "easy", labelKey: "difficulty_easy" },
   { value: "easy-medium", labelKey: "difficulty_easy_medium" },
-  { value: "medium", labelKey: "difficulty_medium" },
-  { value: "medium-hard", labelKey: "difficulty_medium_hard" },
-  { value: "hard", labelKey: "difficulty_hard" },
-  { value: "hard-high", labelKey: "difficulty_hard_high" },
-  { value: "hard-super", labelKey: "difficulty_hard_super" },
-  { value: "hard-extreme", labelKey: "difficulty_hard_extreme" },
+  // The below require a solver to ensure they are actually solvable because they use
+  // more complicated Color Codes
+  // { value: "medium", labelKey: "difficulty_medium" },
+  // { value: "medium-hard", labelKey: "difficulty_medium_hard" },
+  // { value: "hard", labelKey: "difficulty_hard" },
+  // { value: "hard-high", labelKey: "difficulty_hard_high" },
+  // { value: "hard-super", labelKey: "difficulty_hard_super" },
+  // { value: "hard-extreme", labelKey: "difficulty_hard_extreme" },
   // { value: "custom", labelKey: "difficulty_custom" }, // TODO: Implement this
 ];
 
@@ -140,7 +142,7 @@ const mazeTypeOptions: Array<{
     value: "ozobot_road_challenge",
     labelKey: "form_type_ozobot_road_challenge",
   },
-  { value: "ozobot_maze", labelKey: "form_type_ozobot_maze" },
+  // { value: "ozobot_maze", labelKey: "form_type_ozobot_maze" },
   {
     value: "ozobot_city_challenge",
     labelKey: "form_type_ozobot_city_challenge",
@@ -373,7 +375,7 @@ const MazeForm = () => {
                 - Left at Intersection <br />
                 - Straight at Intersection <br />
                 - Right at Intersection <br />
-                <br />
+                {/* <br />
                 <b>Skilled, Veteran, & Expert (6)</b>
                 <br />
                 - Line Switch Left
@@ -384,7 +386,7 @@ const MazeForm = () => {
                 <b>Master, Grandmaster, & Legendary (8)</b>
                 <br />
                 - U-Turn
-                <br />- U-Turn (line end)
+                <br />- U-Turn (line end) */}
               </PopoverContent>
             </Popover>
           </label>
